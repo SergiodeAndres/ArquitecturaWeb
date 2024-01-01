@@ -1,0 +1,116 @@
+header{
+    font-size: 75px;
+    text-align: center;
+}
+
+ul li{
+    display: inline-block;
+    background-color: #2e2e2e;
+    margin: 120px;
+    border-width: 4px;
+    border-style: solid;
+    border-color: darkred;
+}
+
+.option{
+    display: inline-block;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    font-weight: 700;
+    text-transform: uppercase;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.optionbutton{
+    width: 150px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    font-weight: 700;
+    text-transform: uppercase;
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: darkred;
+}
+
+.contenedor{
+    margin: 50px;
+    border:5px;
+    border-style: solid;
+    border-color: burlywood;
+}
+
+.contenedor_titulo{
+    font-size: 50px;
+    text-align: center;
+    border-bottom: 5px;
+    border-style: solid;
+    border-color: burlywood;
+    background-color: aliceblue;
+}
+
+.contenedor_espacio{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    grid-gap: 20px;
+    background-color: antiquewhite;
+}
+
+.pelicula{
+    position: relative;
+    margin: 10px;
+}
+
+img{
+    width: 100%;
+    height: auto;
+}
+
+.imagen{
+    width: 100%;
+    height: auto;
+}
+
+.contenido{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: auto;
+    width: auto;
+    opacity: 0;
+    transition: 0.5s ease;
+    background-color: #2e2e2e;
+    border-width: 4px;
+    border-style: solid;
+    border-color: darkred;
+}
+
+.elementos{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.pelicula:hover .contenido{
+    opacity: 1;
+}
+
+.peliculabutton{
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    border-width: 4px;
+    border-style: solid;
+    border-color: darkred;
+}

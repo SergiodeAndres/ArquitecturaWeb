@@ -1,10 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Start Page</title>
+        <link rel="stylesheet" href="estilos.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <header>¡Bienvenido al EsCineElCine!</header>
+        <nav class="menu">
+            <ul>
+              <li>
+                  <form action="/ProyectoWeb/CargarCartelera" method="POST">
+                      <input type="submit" class="optionbutton" value="Cartelera">
+                  </form>
+              </li>
+              <li><a class="option" href="#">
+                <p>Iniciar sesión</p>
+              </a></li>
+              <li><a class="option" href="#">
+                <p>Registrarse</p>
+              </a></li>
+            </ul>
+        </nav>
     </body>
 </html>
