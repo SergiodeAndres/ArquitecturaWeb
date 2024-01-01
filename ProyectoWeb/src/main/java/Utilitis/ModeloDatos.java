@@ -1,17 +1,20 @@
 package Utilitis;
 
-import Utilitis.Pelicula;
 import java.util.*;
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ModeloDatos {
 
-    private Connection con;
+    private Connection conexion;
+    private Statement statement;
+    private ResultSet setResultado;
 
     public void abrirConexion() {
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver");
-            con = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
+            conexion = DriverManager.getConnection("jdbc:derby://localhost:1527/sample", "app", "app");
             System.out.println("Se ha conectado");
         } catch (Exception e) {
             System.out.println("No se ha conectado");
@@ -36,7 +39,7 @@ public class ModeloDatos {
         ArrayList<String> actores = new ArrayList<>();
         
         try {
-            Statement set = con.createStatement();
+            Statement set = conexion.createStatement();
             ResultSet rs = set.executeQuery("SELECT * FROM PELICULA");
             while (rs.next()) {
                 
@@ -88,7 +91,7 @@ public class ModeloDatos {
     public ArrayList<String> getActores(String nombrePelicula){
         ArrayList<String> actores = new ArrayList<>();
         try {
-            Statement set = con.createStatement();
+            Statement set = conexion.createStatement();
             ResultSet rs = set.executeQuery("SELECT NOMBREACTOR FROM PELICULATIENEACTOR WHERE NOMBREPELICULA = " + "'" + nombrePelicula + "'");
             while (rs.next()) {
                 actores.add(rs.getString(1));
@@ -101,10 +104,76 @@ public class ModeloDatos {
         }
         return actores;
     }
+    
+    public ArrayList<Sala> getSalas() {
+        ArrayList<Sala> salas = new ArrayList<Sala>();
+        abrirConexion();
+        try
+        {
+        statement = conexion.createStatement();
+        setResultado = statement.executeQuery("SELECT * FROM Sala");
+        while (setResultado.next())
+        {
+        String nombre = setResultado.getString("Nombre");
+        int filas = setResultado.getInt("filas");
+        int columnas = setResultado.getInt("columnas");
+        Sala sala = new Sala(nombre, filas, columnas);
+        salas.add(sala);
+        }
+        setResultado.close();
+        statement.close();
+        }
+        catch(Exception e){
+        System.out.println("No lee de la tabla");
+        }
+        return salas; 
+    }
+    
+    public boolean ExisteSala (Sala sala)
+    {
+        boolean veredicto = false; 
+        ArrayList<Sala> salas = getSalas(); 
+        for (Sala s : salas)
+        {
+            if (sala.getNombre().equals(s.getNombre()))
+            {
+                veredicto = true; 
+            }
+        }
+        return veredicto; 
+    }
+    
+    public void AddSala (Sala sala){
+        String query = "INSERT INTO Sala VALUES (?, ?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, sala.getNombre());
+            queryCompleta.setInt(2, sala.getFilas());
+            queryCompleta.setInt(3, sala.getColumnas());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sala");
+            
+        }
+    }
+    
+    public void RemoveSala (Sala sala){
+        String query = "DELETE FROM sala WHERE nombre=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, sala.getNombre());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha eliminado la sala");
+            
+        }
+    }
 
     public void cerrarConexion() {
         try {
-            con.close();
+            conexion.close();
         } catch (Exception e) {
         }
     }

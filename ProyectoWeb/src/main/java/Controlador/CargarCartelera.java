@@ -1,10 +1,11 @@
-package Utilitis;
+package Controlador;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
+import Utilitis.ModeloDatos;
 import Utilitis.Pelicula;
 import jakarta.servlet.ServletConfig;
 import java.io.IOException;
@@ -38,7 +39,7 @@ public class CargarCartelera extends HttpServlet {
         
         s.setAttribute("peliculas", peliculasPorNombre);
         
-        res.sendRedirect(res.encodeRedirectURL("/Cine/Cartelera.jsp"));
+        res.sendRedirect(res.encodeRedirectURL("Cartelera.jsp"));
     }
 
     public void destroy() {
