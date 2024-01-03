@@ -89,5 +89,38 @@
             });
         });
         </script>
+        <h2> Modificar Sala </h2> 
+        <select id="seleccionSala">
+        <% 
+            for (Sala s : salas) {
+        %>
+            <option value="<%=s.getNombre()%>"> <%=s.getNombre()%> </option>
+        <%
+            }
+        %>
+        </select>
+        <form id="formularioModificacion" action="SalasServlet" method="post">
+            <label>Nuevo Nombre: <input id="cajaNombre" type="text" name="Nuevonombre" maxlength = "255" required></label><br>
+            <label>Nuevo Número de filas: <input type="number" name="Nuevofilas" min="1" value="1" required></label><br>
+            <label>Nuevo Número de columnas: <input type="number" name="Nuevocolumnas" min="1" value="1" required></label><br>
+            <input type="submit" value="Modificar">
+        </form>
+        <script>
+            $('#formularioModificacion').submit(function(event) {
+                event.preventDefault(); 
+                var formData = $(this).serialize() + '&modo=modificar&sala=' + $("#seleccionSala").val();
+                $.ajax({
+                    url: 'SalasServlet',
+                    type: 'POST',
+                    data: formData, 
+                    success: function(response) {
+                            window.location.href = 'AdminSalas.jsp';
+                        },
+                    error: function() {
+                        alert('Error al procesar la solicitud');
+                    }
+                });
+            });
+        </script>
     </body>
 </html>

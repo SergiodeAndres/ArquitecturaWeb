@@ -54,6 +54,16 @@ public class SalasServlet extends HttpServlet {
             bd.RemoveSala(sala);
             res.getWriter().print("");
         }
+        else if (req.getParameter("modo").equals("modificar"))
+        {
+            String nombre = req.getParameter("Nuevonombre");
+            int filas = Integer.parseInt(req.getParameter("Nuevofilas"));
+            int columnas = Integer.parseInt(req.getParameter("Nuevocolumnas"));
+            String nombreAntiguo = req.getParameter("sala");
+            Sala sala = new Sala(nombre, filas, columnas);
+            bd.UpdateSala(sala, nombreAntiguo);
+            res.getWriter().print("");
+        }
     }
 
 

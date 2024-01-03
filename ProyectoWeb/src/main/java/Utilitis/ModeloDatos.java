@@ -107,7 +107,7 @@ public class ModeloDatos {
         ArrayList<Sala> salas = new ArrayList<Sala>();
         abrirConexion();
         try
-        {
+        { 
         statement = conexion.createStatement();
         setResultado = statement.executeQuery("SELECT * FROM Sala");
         while (setResultado.next())
@@ -165,6 +165,24 @@ public class ModeloDatos {
         } 
         catch (SQLException ex) {
             System.out.println("No ha eliminado la sala");
+            
+        }
+    }
+    
+    public void UpdateSala (Sala sala, String nombreAntiguo){
+        String query = "UPDATE SALA SET Nombre = ?, Filas = ?, Columnas = ? WHERE Nombre = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, sala.getNombre());
+            queryCompleta.setInt(2, sala.getFilas());
+            queryCompleta.setInt(3, sala.getColumnas());
+            queryCompleta.setString(4, nombreAntiguo);
+            queryCompleta.executeUpdate();
+            //HABRA QUE TENER EN CUENTA SI EN OTRAS TABLAS APARECE EL NOMBRE DE LA SALA Y CAMBIARLO TAMBIEN
+            //FUERZA BRUTA SEGURAMENTE
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha cambiado la sala");
             
         }
     }

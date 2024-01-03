@@ -20,6 +20,10 @@
         <servlet-name>ServletInicioSesion</servlet-name>
         <servlet-class>Controlador.ServletInicioSesion</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SalasServlet</servlet-name>
+        <servlet-class>Controlador.SalasServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CargarCartelera</servlet-name>
         <url-pattern>/CargarCartelera</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>ServletInicioSesion</servlet-name>
         <url-pattern>/ServletInicioSesion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SalasServlet</servlet-name>
+        <url-pattern>/SalasServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
