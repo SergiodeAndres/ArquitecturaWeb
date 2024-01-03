@@ -12,6 +12,14 @@
         <servlet-name>InsertarComentario</servlet-name>
         <servlet-class>Controlador.InsertarComentario</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ServletRegistro</servlet-name>
+        <servlet-class>Controlador.ServletRegistro</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ServletInicioSesion</servlet-name>
+        <servlet-class>Controlador.ServletInicioSesion</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CargarCartelera</servlet-name>
         <url-pattern>/CargarCartelera</url-pattern>
@@ -23,6 +31,14 @@
     <servlet-mapping>
         <servlet-name>InsertarComentario</servlet-name>
         <url-pattern>/InsertarComentario</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletRegistro</servlet-name>
+        <url-pattern>/ServletRegistro</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ServletInicioSesion</servlet-name>
+        <url-pattern>/ServletInicioSesion</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

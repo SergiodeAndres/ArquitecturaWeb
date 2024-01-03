@@ -231,6 +231,73 @@ public class ModeloDatos {
             
         }
     }
+    
+    public ArrayList<Usuario> getUsuarios() {
+        ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+        abrirConexion();
+        try
+        {
+        statement = conexion.createStatement();
+        setResultado = statement.executeQuery("SELECT * FROM USUARIO");
+        while (setResultado.next())
+        {
+        String nombre = setResultado.getString("Nombre");
+        String email = setResultado.getString("Correo");
+        String contraseña = setResultado.getString("Contraseña");
+        Usuario u = new Usuario(nombre, contraseña,email);
+        usuarios.add(u);
+        }
+        setResultado.close();
+        statement.close();
+        }
+        catch(Exception e){
+        System.out.println("No lee de la tabla");
+        }
+        return usuarios; 
+    }
+    
+     public boolean ExisteUsuario (Usuario usuario)
+    {
+        boolean veredicto = false; 
+        ArrayList<Usuario> usuarios = getUsuarios(); 
+        for (Usuario u : usuarios)
+        {
+            if (usuario.getNombre().equals(u.getNombre()))
+            {
+                veredicto = true; 
+            }
+        }
+        return veredicto; 
+    }
+     
+    public boolean coincideContraseña (Usuario usuario)
+    {
+        boolean veredicto = false; 
+        ArrayList<Usuario> usuarios = getUsuarios(); 
+        for (Usuario u : usuarios)
+        {
+            if (usuario.getNombre().equals(u.getNombre()) && usuario.getContraseña().equals(u.getContraseña()))
+            {
+                veredicto = true; 
+            }
+        }
+        return veredicto; 
+    }
+     
+     public void AddUsuario (Usuario usuario){
+        String query = "INSERT INTO Usuario VALUES (?, ?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, usuario.getNombre());
+            queryCompleta.setString(3, usuario.getContraseña());
+            queryCompleta.setString(2, usuario.getCorreo());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido el usuario");
+            
+        }
+    }
 
     public void cerrarConexion() {
         try {

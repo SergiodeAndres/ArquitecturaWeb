@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="Modelo.Sala" %>
-<%@page import="Modelo.ModeloDatos" %>
+<%@page import="Utilitis.Sala" %>
+<%@page import="Utilitis.ModeloDatos" %>
 <%@page import="java.util.ArrayList" %>
 <% ModeloDatos modeloDatos = new ModeloDatos();%>
 <!DOCTYPE html>
