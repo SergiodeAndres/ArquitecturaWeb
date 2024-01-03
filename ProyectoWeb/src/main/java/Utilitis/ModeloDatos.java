@@ -1,6 +1,7 @@
 package Utilitis;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.ArrayList;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,11 +45,8 @@ public class ModeloDatos {
             while (rs.next()) {
                 
                 nombre = rs.getString(1);//T
-                System.out.println(nombre);
                 sinopsis = rs.getString(2);//T
-                System.out.println(sinopsis);
                 paginaoficial = rs.getString(3);//T
-                System.out.println(paginaoficial);
                 titulooriginal = rs.getString(4);//T
                 System.out.println(titulooriginal);
                 genero = rs.getString(5);//T
@@ -69,8 +67,10 @@ public class ModeloDatos {
                 System.out.println(imagen);
                 actores.addAll(getActores(nombre));
                 
+                System.out.println(actores);
+                
                 Pelicula pelicula = new Pelicula(nombre, sinopsis, paginaoficial, titulooriginal, genero, nacionalidad, 
-                duracion, ano, distribuidora, clasificacion, imagen, actores);
+                duracion, ano, distribuidora, director, clasificacion, imagen, actores);
                 
                 peliculasPorNombre.put(nombre, pelicula);
                 
@@ -81,8 +81,6 @@ public class ModeloDatos {
         } catch (Exception e) {
             System.out.println("No coge de la tabla");
             System.out.println(e);
-        } finally{
-            
         }
         
         return peliculasPorNombre;
@@ -167,6 +165,69 @@ public class ModeloDatos {
         } 
         catch (SQLException ex) {
             System.out.println("No ha eliminado la sala");
+            
+        }
+    }
+    
+    public ArrayList<Sesion> getSesiones(String nombrePelicula){
+        ArrayList<Sesion> sesiones = new ArrayList<>();
+        Date fecha;
+        Time hora;
+        String nombreSala;
+        String nombrePeli;
+        
+        try {
+            Statement set = conexion.createStatement();
+            ResultSet rs = set.executeQuery("SELECT * FROM SESION WHERE NOMBREPELICULA = " + "'" + nombrePelicula + "'");
+            while (rs.next()) {
+                fecha = rs.getDate(1);
+                hora = rs.getTime(2);
+                nombreSala = rs.getString(3);
+                nombrePeli = rs.getString(4);
+                
+                Sesion sesion = new Sesion(fecha, hora, nombreSala, nombrePeli);
+                
+                sesiones.add(sesion);
+            }
+            rs.close();
+            set.close();
+        } catch (Exception e) {
+            System.out.println("No coge de la tabla");
+            System.out.println(e);
+        }
+        
+        return sesiones;
+    }
+    
+    public ArrayList<String> getComentarios(String nombrePelicula){
+        ArrayList<String> comentarios = new ArrayList<>();
+        
+        try {
+            Statement set = conexion.createStatement();
+            ResultSet rs = set.executeQuery("SELECT COMENTARIO FROM PELICULATIENECOMENTARIO WHERE NOMBREPELICULA = " + "'" + nombrePelicula + "'");
+            while (rs.next()) {
+                comentarios.add(rs.getString(1));
+            }
+            rs.close();
+            set.close();
+        } catch (Exception e) {
+            System.out.println("No coge de la tabla");
+            System.out.println(e);
+        }
+        
+        return comentarios;
+    }
+    
+    public void addComentario(String nombrePelicula, String comentario){
+        String query = "INSERT INTO PELICULATIENECOMENTARIO VALUES (?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.setString(2, comentario);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido el comentario");
             
         }
     }

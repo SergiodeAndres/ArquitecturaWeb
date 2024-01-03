@@ -4,9 +4,25 @@
         <servlet-name>CargarCartelera</servlet-name>
         <servlet-class>Controlador.CargarCartelera</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>CargarInformacionPelicula</servlet-name>
+        <servlet-class>Controlador.CargarInformacionPelicula</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>InsertarComentario</servlet-name>
+        <servlet-class>Controlador.InsertarComentario</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CargarCartelera</servlet-name>
         <url-pattern>/CargarCartelera</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CargarInformacionPelicula</servlet-name>
+        <url-pattern>/CargarInformacionPelicula</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertarComentario</servlet-name>
+        <url-pattern>/InsertarComentario</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

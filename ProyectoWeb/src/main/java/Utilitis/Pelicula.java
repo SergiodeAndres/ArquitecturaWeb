@@ -23,11 +23,12 @@ public class Pelicula {
     private int duracion;
     private int ano;
     private String distribuidora;
+    private String director;
     private String clasificacion;
     private String imagen;
     private ArrayList<String> actores;
 
-    public Pelicula(String nombre, String sinopsis, String paginaoficial, String titulooriginal, String genero, String nacionalidad, int duracion, int ano, String distribuidora, String clasificacion, String imagen, ArrayList<String> actores) {
+    public Pelicula(String nombre, String sinopsis, String paginaoficial, String titulooriginal, String genero, String nacionalidad, int duracion, int ano, String distribuidora, String director, String clasificacion, String imagen, ArrayList<String> actores) {
         this.nombre = nombre;
         this.sinopsis = sinopsis;
         this.paginaoficial = paginaoficial;
@@ -37,9 +38,10 @@ public class Pelicula {
         this.duracion = duracion;
         this.ano = ano;
         this.distribuidora = distribuidora;
+        this.director = director;
         this.clasificacion = clasificacion;
         this.imagen = imagen;
-        this.actores = actores;
+        this.actores = new ArrayList(actores);
     }
 
     public String getNombre() {
@@ -113,12 +115,20 @@ public class Pelicula {
     public void setDistribuidora(String distribuidora) {
         this.distribuidora = distribuidora;
     }
+    
+    public String getDirector() {
+        return director;
+    }
 
-    public String getClasisficacion() {
+    public void setDirector(String director) {
+        this.director = director;
+    }
+
+    public String getClasificacion() {
         return clasificacion;
     }
 
-    public void setClasisficacion(String clasificacion) {
+    public void setClasificacion(String clasificacion) {
         this.clasificacion = clasificacion;
     }
 

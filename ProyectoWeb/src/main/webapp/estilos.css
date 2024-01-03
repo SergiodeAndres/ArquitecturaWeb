@@ -44,10 +44,31 @@ ul li{
     border-color: burlywood;
 }
 
-.contenedor_titulo{
+.informacionPelicula{
+    margin-left: 24%;
+    margin-right: 24%;
+}
+
+.titulo1{
     font-size: 50px;
     text-align: center;
-    border-bottom: 5px;
+    border: 5px;
+    border-style: solid;
+    border-color: burlywood;
+}
+
+.titulo2{
+    font-size: 20px;
+    text-align: center;
+    border: 2px;
+    border-style: solid;
+    border-color: burlywood;
+    background-color: aliceblue;
+}
+
+.titulo3{
+    font-size: 20px;
+    border: 2px;
     border-style: solid;
     border-color: burlywood;
     background-color: aliceblue;
@@ -58,6 +79,39 @@ ul li{
     grid-template-columns: repeat(4, 1fr); 
     grid-gap: 20px;
     background-color: antiquewhite;
+}
+
+.contenedorH{
+    float: left;
+    margin: 10px;
+}
+
+.contenedorV{
+    margin: 10px;
+}
+
+.contenedor_hora{
+    position: relative;
+    width: 100px;
+    height: 50px;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    font-weight: 700;
+    text-transform: uppercase;
+    border-width: 5px;
+    border-style: solid;
+    border-color: darkred;
+    margin: 10px;
+}
+
+.contenedorimagen{
+    width: 200px;
+    height: 450px;
+}
+
+.informacion{
+    width: 425px;
+    height: auto;
 }
 
 .pelicula{
@@ -113,4 +167,31 @@ img{
     border-width: 4px;
     border-style: solid;
     border-color: darkred;
+}
+
+.horariobutton{
+    width: 100px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    font-size: 10px;
+    text-transform: uppercase;
+    border-width: 0.5px;
+    border-style: solid;
+    border-color: darkred;   
+}
+
+.formulariobutton{
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    border-width: 4px;
+    border-style: solid;
+    border-color: darkred;
+}
+
+.comentario_pelicula{
+    margin-bottom: 50px;
 }
