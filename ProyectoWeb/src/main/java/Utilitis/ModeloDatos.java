@@ -2,6 +2,8 @@ package Utilitis;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,6 +127,22 @@ public class ModeloDatos {
         System.out.println("No lee de la tabla");
         }
         return salas; 
+    }
+    
+    public Sala getSalaNombre(String nombre)
+    {
+        ArrayList<Sala> salas = getSalas(); 
+        Sala salaSeleccionada = new Sala("", 0, 0); 
+        for (Sala s: salas)
+        {
+            if (s.getNombre().equals(nombre))
+            {
+                salaSeleccionada.setNombre(s.getNombre());
+                salaSeleccionada.setColumnas(s.getColumnas());
+                salaSeleccionada.setFilas(s.getFilas());
+            }
+        }
+        return salaSeleccionada;
     }
     
     public boolean ExisteSala (Sala sala)
@@ -302,7 +320,7 @@ public class ModeloDatos {
         return veredicto; 
     }
      
-     public void AddUsuario (Usuario usuario){
+    public void AddUsuario (Usuario usuario){
         String query = "INSERT INTO Usuario VALUES (?, ?, ?)";
         try {
             PreparedStatement queryCompleta = conexion.prepareStatement(query);
@@ -315,6 +333,104 @@ public class ModeloDatos {
             System.out.println("No ha añadido el usuario");
             
         }
+    }
+     
+    public void AddSesion (Sesion sesion)
+    {
+        String query = "INSERT INTO Sesion VALUES (?, ?, ?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setDate(1, sesion.getFecha());
+            queryCompleta.setTime(2, sesion.getHora());
+            queryCompleta.setString(3, sesion.getNombreSala());
+            queryCompleta.setString(4, sesion.getNombrePelicula());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sala");
+            
+        }
+    }
+    
+    public ArrayList<Sesion> getSesionesPeliculaSala (String pelicula, String sala)
+    {
+        ArrayList<Sesion> sesiones = new ArrayList<Sesion>(); 
+        String query = "SELECT * FROM Sesion WHERE nombresala = ? AND nombrepelicula = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, sala);
+            queryCompleta.setString(2, pelicula);
+            ResultSet rs = queryCompleta.executeQuery();
+            while (rs.next()) {
+                Sesion s = new Sesion(rs.getDate(1), rs.getTime(2), 
+                        rs.getString(3), rs.getString(4));
+                sesiones.add(s);
+            }
+            rs.close();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha leido de la tabla");
+        }
+        Collections.sort(sesiones, new Comparator<Sesion>() {
+            @Override
+            public int compare(Sesion s1, Sesion s2) {
+                int fechaComparacion = s1.getFecha().compareTo(s2.getFecha());
+                if (fechaComparacion != 0) {
+                    return fechaComparacion;
+                } else {
+                    return s1.getHora().compareTo(s2.getHora());
+                }
+            }
+        });
+        return sesiones;
+    }
+    
+    public void AddEntrada (Entrada entrada)
+    {
+        String query = "INSERT INTO Entrada VALUES (?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setDate(1, entrada.getFecha());
+            queryCompleta.setTime(2, entrada.getHora());
+            queryCompleta.setString(3, entrada.getNombreSala());
+            queryCompleta.setInt(4, entrada.getFila());
+            queryCompleta.setInt(5, entrada.getColumna());
+            queryCompleta.setString(6, entrada.getNombrePelicula());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la entrada");
+            
+        }
+    }
+    
+    public ArrayList<Entrada> getEntradasSesion (String pelicula, String sala, String fecha, String hora)
+    {
+        ArrayList<Entrada> entradas = new ArrayList<Entrada>(); 
+        String query = "SELECT * FROM Entrada WHERE nombresala = ? AND nombrepelicula = ? AND fecha = ? AND hora = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, sala);
+            queryCompleta.setString(2, pelicula);
+            queryCompleta.setDate(3, Date.valueOf(fecha));
+            queryCompleta.setTime(4, Time.valueOf(hora));
+            ResultSet rs = queryCompleta.executeQuery();
+            while (rs.next()) {
+                Entrada e = new Entrada(rs.getDate(1), rs.getTime(2), 
+                        rs.getString(3), rs.getInt(4), rs.getInt(5), 
+                        rs.getString(6));
+                entradas.add(e);
+            }
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sala");
+            
+        }
+        for (Entrada e: entradas)
+                { 
+                    System.out.println("Fila " + e.getFila() + " Columna" + e.getColumna());
+                }
+        return entradas; 
     }
 
     public void cerrarConexion() {
