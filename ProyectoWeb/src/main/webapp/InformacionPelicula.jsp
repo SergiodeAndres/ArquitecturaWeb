@@ -18,7 +18,7 @@
         <header>EsCineElCine</header>
         <nav class="menu">
             <ul>
-              <li><a class="option" href="Cartelera.jsp">
+              <li><a class="option" href="/Cine/Cartelera.jsp">
                 <p>Volver</p>
               </a></li>
             </ul>
@@ -59,44 +59,51 @@
                 </div>
             </div>
         </div>
+        
+        <%String username = (String) session.getAttribute("username");%>
                 
-        <%ArrayList<Sesion> sesiones = (ArrayList) session.getAttribute("sesiones_pelicula_seleccionada");%>
+        <%if (!(username == null)){%>
                 
-        <div class="contenedor informacionPelicula">
-            <div class="contenedorV">
-                <div class="titulo2">Sesiones</div>
-                <div class="contenedor_espacio_hora">
-                    <%for (Sesion sesion:sesiones){%>
-                        <div class="contenedor_hora">
-                            <input type="button" class="horariobutton" value="<%=sesion.getHora()%> <%=sesion.getFecha()%>"/>
+            <%ArrayList<Sesion> sesiones = (ArrayList) session.getAttribute("sesiones_pelicula_seleccionada");%>
+
+            <div class="contenedor informacionPelicula">
+                <div class="contenedorV">
+                    <div class="titulo2">Sesiones</div>
+                    <div class="contenedor_espacio_hora">
+                        <%for (Sesion sesion:sesiones){%>
+                            <div class="contenedor_hora">
+                                <input type="button" class="horariobutton" value="<%=sesion.getHora()%> <%=sesion.getFecha()%>"/>
+                            </div>
+                        <%}%>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contenedor informacionPelicula">
+                <div class="contenedorV">
+                    <div class="titulo2">Comentarios:</div>
+                    <div class="titulo3">Escribe tu comentario:</div>
+                    <form id="formulario" action="InsertarComentario" method="post">
+                        <textarea name="comentario" rows="10" cols="80" required></textarea><br>
+                        <input type="submit" class="formulariobutton" value="Enviar comentario">
+                    </form>
+                </div>
+            </div>
+
+            <%ArrayList<String> comentarios = (ArrayList) session.getAttribute("comentarios_pelicula_seleccionada");%>
+
+            <div class="contenedor informacionPelicula">
+                <div class="contenedorV">
+                    <div class="titulo3">Comentarios de otros usuarios:</div>
+                    <%for (String comentario:comentarios){%>
+                        <div class="comentario_pelicula">
+                            <p><%=comentario%>.</p>
                         </div>
                     <%}%>
                 </div>
             </div>
-        </div>
-                
-        <div class="contenedor informacionPelicula">
-            <div class="contenedorV">
-                <div class="titulo2">Comentarios:</div>
-                <div class="titulo3">Escribe tu comentario:</div>
-                <form id="formulario" action="InsertarComentario" method="post">
-                    <textarea name="comentario" rows="10" cols="80" required></textarea><br>
-                    <input type="submit" class="formulariobutton" value="Enviar comentario">
-                </form>
-            </div>
-        </div>
-                
-        <%ArrayList<String> comentarios = (ArrayList) session.getAttribute("comentarios_pelicula_seleccionada");%>
-                
-        <div class="contenedor informacionPelicula">
-            <div class="contenedorV">
-                <div class="titulo3">Comentarios de otros usuarios:</div>
-                <%for (String comentario:comentarios){%>
-                    <div class="comentario_pelicula">
-                        <p><%=comentario%>.</p>
-                    </div>
-                <%}%>
-            </div>
-        </div>
+            
+        <%}%>
     </body>
 </html>
+

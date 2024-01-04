@@ -1,3 +1,10 @@
+<%-- 
+    Document   : MainUsuario
+    Created on : 4 ene 2024, 19:07:59
+    Author     : paser
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -5,17 +12,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <header>¡Bienvenido al EsCineElCine!</header>
+        <header>EsCineElCine</header>
+        <h1>Usuario: <%=(String) session.getAttribute("username")%></h1>
         <nav class="menu">
             <ul>
               <li><a class="option" href="CargarCartelera">
                 <p>Cartelera</p>
-              </a></li>
-              <li><a class="option" href="IniciarSesion.html">
-                <p>Iniciar sesión</p>
-              </a></li>
-              <li><a class="option" href="Registrarse.html">
-                <p>Registrarse</p>
               </a></li>
             </ul>
         </nav>

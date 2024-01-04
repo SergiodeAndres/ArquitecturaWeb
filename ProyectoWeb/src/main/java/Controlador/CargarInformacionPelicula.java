@@ -38,18 +38,21 @@ public class CargarInformacionPelicula extends HttpServlet {
         
         HashMap<String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
         
+        String username = (String) s.getAttribute("username");
+        
         Pelicula peliculaSeleccionada = peliculasPorNombre.get(nombrePeliculaSeleccionada);
-        
-        ArrayList<Sesion> sesiones = new ArrayList<>(bd.getSesiones(nombrePeliculaSeleccionada));
-        
-        ArrayList<String> comentarios = new ArrayList<>(bd.getComentarios(peliculaSeleccionada.getNombre()));
         
         s.setAttribute("datos_pelicula_seleccionada", peliculaSeleccionada);
         
-        s.setAttribute("sesiones_pelicula_seleccionada", sesiones);
+        if (!(username == null)){
+            ArrayList<Sesion> sesiones = new ArrayList<>(bd.getSesiones(nombrePeliculaSeleccionada));
         
-        s.setAttribute("comentarios_pelicula_seleccionada", comentarios);
-        
+            ArrayList<String> comentarios = new ArrayList<>(bd.getComentarios(peliculaSeleccionada.getNombre()));
+
+            s.setAttribute("sesiones_pelicula_seleccionada", sesiones);
+
+            s.setAttribute("comentarios_pelicula_seleccionada", comentarios);
+        }          
     }
     
     public void destroy() {

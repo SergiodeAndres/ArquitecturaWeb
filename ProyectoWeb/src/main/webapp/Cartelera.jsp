@@ -15,20 +15,40 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     </head>
     <body>
+        
+        <%String username = (String) session.getAttribute("username");%>
+        
         <header>EsCineElCine</header>
-        <nav class="menu">
-            <ul>
-              <li><a class="option" href="index.html">
-                <p>Inicio</p>
-              </a></li>
-              <li><a class="option" href="#">
-                <p>Iniciar sesión</p>
-              </a></li>
-              <li><a class="option" href="#">
-                <p>Registrarse</p>
-              </a></li>
-            </ul>
-        </nav>
+        
+        <%if (username == null){%>
+        
+            <nav class="menu">
+                <ul>
+                  <li><a class="option" href="index.html">
+                    <p>Inicio</p>
+                  </a></li>
+                  <li><a class="option" href="IniciarSesion.html">
+                    <p>Iniciar sesión</p>
+                  </a></li>
+                  <li><a class="option" href="Registrarse.html">
+                    <p>Registrarse</p>
+                  </a></li>
+                </ul>
+            </nav>
+        
+        <%}else{%>
+        
+             <h1>Usuario: <%=(String) session.getAttribute("username")%></h1>
+             
+             <nav class="menu">
+                <ul>
+                  <li><a class="option" href="MainUsuario.jsp">
+                    <p>Inicio</p>
+                  </a></li>
+                </ul>
+            </nav>
+        
+        <%}%>
         
         <%HashMap<String, Pelicula> peliculas = (HashMap) session.getAttribute("peliculas");%>
         
@@ -66,5 +86,4 @@
             </div>
         </div>
     </body>
-    <script>
 </html>

@@ -47,6 +47,7 @@ public class ServletInicioSesion extends HttpServlet {
         }
         else 
         {
+            s.setAttribute("username", nombre);
             res.getWriter().print("");
         }
     }
