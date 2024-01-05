@@ -1,3 +1,6 @@
+:root {
+    --rojo: #2e2e2e;
+}
 header{
     font-size: 75px;
     text-align: center;
@@ -5,7 +8,7 @@ header{
 
 ul li{
     display: inline-block;
-    background-color: #2e2e2e;
+    background-color: var(--rojo);
     margin-left: 120px;
     margin-right: 120px;
     border-width: 4px;
@@ -15,7 +18,7 @@ ul li{
 
 .option{
     display: inline-block;
-    background-color: #2e2e2e;
+    background-color: var(--rojo);
     color: rgb(204, 0, 0);
     font-weight: 700;
     text-transform: uppercase;

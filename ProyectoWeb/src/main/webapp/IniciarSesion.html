@@ -74,10 +74,14 @@
                     type: 'POST',
                     data: formData, // Obtener los datos del formulario
                     success: function(response) {
-                        if (response.trim() !== "") {
-                            alert(response); 
-                        } else {
+                        if (response.trim() === "ADMIN") {
+                           window.location.href = 'InicioAdmin.jsp';
+                        } 
+                        else if (response.trim() === "") {
                             window.location.href = 'MainUsuario.jsp';
+                        }
+                        else {
+                            alert(response); 
                         }
                     },
                     error: function() {

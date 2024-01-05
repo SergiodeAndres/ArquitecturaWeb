@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.sql.*;
+import java.util.Iterator;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -86,6 +88,12 @@ public class ModeloDatos {
         }
         
         return peliculasPorNombre;
+    }
+    
+    public Pelicula getPeliculaNombre(String nombre)
+    {
+        Pelicula peliculaSeleccionada = getPeliculas().get(nombre);
+        return peliculaSeleccionada;
     }
 
     public ArrayList<String> getActores(String nombrePelicula){
@@ -203,6 +211,24 @@ public class ModeloDatos {
             System.out.println("No ha cambiado la sala");
             
         }
+    }
+    
+    public boolean salaTieneSesiones (String nombreSala)
+    {
+        boolean veredicto = false; 
+        String query = "SELECT * FROM Sesion WHERE nombresala = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombreSala);
+            ResultSet rs = queryCompleta.executeQuery();
+            veredicto = rs.next();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha leido de la tabla");
+            
+        }
+        System.out.println(veredicto);
+        return veredicto;
     }
     
     public ArrayList<Sesion> getSesiones(String nombrePelicula){

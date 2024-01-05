@@ -48,21 +48,48 @@ public class SalasServlet extends HttpServlet {
         else if (req.getParameter("modo").equals("eliminar"))
         {
             String nombre = req.getParameter("nombreSala");
-            int filas = Integer.parseInt(req.getParameter("filasSala"));
-            int columnas = Integer.parseInt(req.getParameter("columnasSala"));
-            Sala sala = new Sala(nombre, filas, columnas);
-            bd.RemoveSala(sala);
-            res.getWriter().print("");
+            if (bd.salaTieneSesiones(nombre))
+            {
+                PrintWriter out = res.getWriter();
+                out.println("No se puede eliminar la " + nombre + "porque tiene "
+                        + " sesiones. Elimine primero todas las sesiones de esta sala.");
+            }
+            else
+            {
+                int filas = Integer.parseInt(req.getParameter("filasSala"));
+                int columnas = Integer.parseInt(req.getParameter("columnasSala"));
+                Sala sala = new Sala(nombre, filas, columnas);
+                bd.RemoveSala(sala);
+                res.getWriter().print("");
+            }
         }
         else if (req.getParameter("modo").equals("modificar"))
         {
-            String nombre = req.getParameter("Nuevonombre");
-            int filas = Integer.parseInt(req.getParameter("Nuevofilas"));
-            int columnas = Integer.parseInt(req.getParameter("Nuevocolumnas"));
             String nombreAntiguo = req.getParameter("sala");
-            Sala sala = new Sala(nombre, filas, columnas);
-            bd.UpdateSala(sala, nombreAntiguo);
-            res.getWriter().print("");
+            String nombre = req.getParameter("Nuevonombre");
+            if (bd.salaTieneSesiones(nombreAntiguo))
+            {
+                PrintWriter out = res.getWriter();
+                out.println("No se puede modificar la " + nombreAntiguo + "porque tiene "
+                        + " sesiones. Elimine primero todas las sesiones de esta sala.");
+            }
+            else
+            {
+                int filas = Integer.parseInt(req.getParameter("Nuevofilas"));
+                int columnas = Integer.parseInt(req.getParameter("Nuevocolumnas"));
+                Sala sala = new Sala(nombre, filas, columnas);
+                if (!bd.ExisteSala(sala))
+                {
+                    bd.UpdateSala(sala, nombreAntiguo);
+                    res.getWriter().print("");
+                }
+                else 
+                {
+                    PrintWriter out = res.getWriter();
+                    out.println("No se puede modificar la " + nombreAntiguo + "porque ya existe"
+                        + "la " + nombre);
+                }
+            }
         }
     }
 

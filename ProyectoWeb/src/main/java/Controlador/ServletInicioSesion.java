@@ -47,8 +47,17 @@ public class ServletInicioSesion extends HttpServlet {
         }
         else 
         {
-            s.setAttribute("username", nombre);
-            res.getWriter().print("");
+            if(nombre.equals("admin") && contraseña.equals("admin"))
+            {
+                s.setAttribute("username", nombre);
+                PrintWriter out = res.getWriter();
+                out.println("ADMIN");
+            }
+            else
+            {
+                s.setAttribute("username", nombre);
+                res.getWriter().print("");
+            }
         }
     }
 

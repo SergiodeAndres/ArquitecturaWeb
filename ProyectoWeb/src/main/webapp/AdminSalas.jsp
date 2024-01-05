@@ -11,6 +11,18 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     </head>
     <body>
+        <%
+            if ( session.getAttribute("username") != null) {
+                String usuario = (String) session.getAttribute("username");
+                if(!usuario.equals("admin"))
+                {
+                    response.sendRedirect("error.jsp");
+                }   
+            } 
+            else {
+                response.sendRedirect("error.jsp");
+            }
+        %>
         <table>
             <!-- Encabezados -->
             <tr>
@@ -48,18 +60,30 @@
             <script>
             $(document).ready(function() {
                 $('#BotonBorrar<%=s.getNombre().replaceAll("\\s", "")%>').click(function() {
-                    $.ajax({
+                    var respuesta = confirm("Se va a realizar la siguiente acción: \n Borrar <%=s.getNombre()%> \n ¿Desea continuar?")
+                    if (respuesta === true)
+                    {
+                        $.ajax({
                         url: 'SalasServlet',
                         type: 'POST',
                         data: { modo: 'eliminar', nombreSala: '<%=s.getNombre() %>',
                         filasSala: '<%=s.getFilas() %>', columnasSala: '<%=s.getColumnas() %>'},
                         success: function(response) {
-                            window.location.href = 'AdminSalas.jsp';
+                            if (response.trim() !== "") {
+                                alert(response); 
+                            } else {
+                                window.location.href = 'AdminSalas.jsp';
+                            }
                         },
                         error: function() {
                             alert('Error al procesar la solicitud');
                         }
-                    });
+                        });
+                    }
+                    else
+                    {
+                        window.location.href = 'AdminSalas.jsp';
+                    }
                 });
             });
         </script>
@@ -69,12 +93,12 @@
         <script>
         $(document).ready(function() {
             $('#formulario').submit(function(event) {
-                event.preventDefault(); // Evitar el envío del formulario por defecto
+                event.preventDefault();
                 var formData = $(this).serialize() + '&modo=añadir';
                 $.ajax({
                     url: 'SalasServlet',
                     type: 'POST',
-                    data: formData, // Obtener los datos del formulario
+                    data: formData,
                     success: function(response) {
                         if (response.trim() !== "") {
                             alert(response); 
@@ -108,18 +132,30 @@
         <script>
             $('#formularioModificacion').submit(function(event) {
                 event.preventDefault(); 
-                var formData = $(this).serialize() + '&modo=modificar&sala=' + $("#seleccionSala").val();
-                $.ajax({
-                    url: 'SalasServlet',
-                    type: 'POST',
-                    data: formData, 
-                    success: function(response) {
-                            window.location.href = 'AdminSalas.jsp';
-                        },
-                    error: function() {
-                        alert('Error al procesar la solicitud');
-                    }
-                });
+                var respuesta = confirm("Se va a realizar la siguiente acción: \n Modificar " + $("#seleccionSala").val() + "\n ¿Desea continuar?")
+                if (respuesta === true)
+                {
+                    var formData = $(this).serialize() + '&modo=modificar&sala=' + $("#seleccionSala").val();
+                    $.ajax({
+                        url: 'SalasServlet',
+                        type: 'POST',
+                        data: formData, 
+                        success: function(response) {
+                                if (response.trim() !== "") {
+                                alert(response); 
+                                } else {
+                                    window.location.href = 'AdminSalas.jsp';
+                                }
+                            },
+                        error: function() {
+                            alert('Error al procesar la solicitud');
+                        }
+                    });
+                }
+                else
+                {
+                    window.location.href = 'AdminSalas.jsp';
+                }
             });
         </script>
     </body>

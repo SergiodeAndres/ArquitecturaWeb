@@ -21,6 +21,7 @@ import Utilitis.ModeloDatos;
 import Utilitis.Sesion;
 import Utilitis.Sala;
 import Utilitis.Entrada;
+import Utilitis.Pelicula;
 
 public class SesionesServlet extends HttpServlet {
     private ModeloDatos bd;
@@ -44,15 +45,37 @@ public class SesionesServlet extends HttpServlet {
             LocalDate fecha = LocalDate.of(fechaHora.getYear(), fechaHora.getMonthValue(), fechaHora.getDayOfMonth());
             LocalTime hora = LocalTime.of(fechaHora.getHour(), fechaHora.getMinute(), 0);
             Sesion sesion = new Sesion(Date.valueOf(fecha), Time.valueOf(hora), sala, pelicula);
-            bd.AddSesion(sesion);
-            Sala salaSesion = bd.getSalaNombre(sala);
-            for (int i = 1; i <= salaSesion.getFilas(); i++)
+            ArrayList<Sesion> sesionesExistentesSala = bd.getSesionesPeliculaSala(pelicula, sala);
+            boolean puedeCrearSesion = true;
+            for (Sesion s: sesionesExistentesSala)
             {
-                for (int j = 1; j <= salaSesion.getColumnas(); j++)
+                Pelicula peliculaActual = bd.getPeliculaNombre(s.getNombrePelicula());
+                if (Date.valueOf(fecha).equals(s.getFecha()) && Time.valueOf(hora).getTime() >= s.getHora().getTime() 
+                        && Time.valueOf(hora).getTime() <= s.getHora().getTime() + (peliculaActual.getDuracion() * 60 * 1000))
                 {
-                    Entrada entrada = new Entrada(Date.valueOf(fecha),Time.valueOf(hora),sala,i,j,pelicula);
-                    bd.AddEntrada(entrada);
+                    puedeCrearSesion = false;
                 }
+            }
+            if (puedeCrearSesion)
+            {
+                bd.AddSesion(sesion);
+                Sala salaSesion = bd.getSalaNombre(sala);
+                for (int i = 1; i <= salaSesion.getFilas(); i++)
+                {
+                    for (int j = 1; j <= salaSesion.getColumnas(); j++)
+                    {
+                        Entrada entrada = new Entrada(Date.valueOf(fecha),Time.valueOf(hora),sala,i,j,pelicula);
+                        bd.AddEntrada(entrada);
+                    }
+                }
+                res.getWriter().print("");
+            }
+            else 
+            {
+                PrintWriter out = res.getWriter();
+                out.println("No se puede añadir está sesión porque su hora "
+                        + "de comienzo coincide con la proyección de otra película "
+                        + "en esa sala.");
             }
         }
         else if (req.getParameter("modo").equals("buscar"))

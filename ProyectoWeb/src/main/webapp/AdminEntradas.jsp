@@ -17,9 +17,21 @@ modeloDatos.abrirConexion();%>
     </head>
     <body>
         <%
+            if ( session.getAttribute("username") != null) {
+                String usuario = (String) session.getAttribute("username");
+                if(!usuario.equals("admin"))
+                {
+                    response.sendRedirect("error.jsp");
+                }   
+            } 
+            else {
+                response.sendRedirect("error.jsp");
+            }
+        %>
+        <%
         String salaActual =(String) session.getAttribute("salaActual");
         String peliculaActual =(String) session.getAttribute("peliculaActual");
-        HashMap<String, Pelicula> peliculas = modeloDatos.getPeliculas();
+        HashMap<String, Pelicula> peliculas = modeloDatos.getPeliculas(); 
         ArrayList<Sala> salas = modeloDatos.getSalas();
         %>
         
@@ -180,8 +192,23 @@ modeloDatos.abrirConexion();%>
                     type: 'POST',
                     data: formData,
                     success: function(response) {
-                        window.location.href = 'AdminEntradas.jsp';
-                    },
+                        if (response.trim() !== "") {
+                            alert(response); 
+                            } else {
+                                var formData = '&modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                                    $.ajax({
+                                        url: 'SesionesServlet',
+                                        type: 'POST',
+                                        data: formData,
+                                        success: function(response) {
+                                            window.location.href = 'AdminEntradas.jsp';
+                                        },
+                                        error: function() {
+                                            alert('Error al procesar la solicitud');
+                                        }
+                                    });
+                                }
+                        },
                     error: function() {
                         alert('Error al procesar la solicitud');
                     }
@@ -189,6 +216,5 @@ modeloDatos.abrirConexion();%>
             });
         });
         </script>
-        
     </body>
 </html>
