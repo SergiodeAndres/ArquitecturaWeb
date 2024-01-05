@@ -13,6 +13,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="estilos.css">
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     </head>
     <body>
         <header>EsCineElCine</header>
@@ -72,13 +73,40 @@
                     <div class="contenedor_espacio_hora">
                         <%for (Sesion sesion:sesiones){%>
                             <div class="contenedor_hora">
-                                <input type="button" class="horariobutton" value="<%=sesion.getHora()%> <%=sesion.getFecha()%>"/>
+                                
+                                <button class="horariobutton" id="<%=sesion.getNombrePelicula().replaceAll("\\s", "")%><%=sesion.getNombreSala().replaceAll("\\s", "")%><%=sesion.getHora().toString().replaceAll(":", "")%><%=sesion.getFecha().toString().replaceAll("-", "")%>">
+                                    <%=sesion.getHora()%> <%=sesion.getFecha()%>
+                                </button>
+                                <script>
+                                $(document).ready(function() {
+                                    $('#<%=sesion.getNombrePelicula().replaceAll("\\s", "")%><%=sesion.getNombreSala().replaceAll("\\s", "")%><%=sesion.getHora().toString().replaceAll(":", "")%><%=sesion.getFecha().toString().replaceAll("-", "")%>').click(function() {
+                                        $.ajax({
+                                            url: 'ServletReserva',
+                                            type: 'POST',
+                                            data: { nombrePelicula: '<%=sesion.getNombrePelicula()%>', nombreSala: '<%=sesion.getNombreSala()%>', fechaSesion: '<%=sesion.getFecha()%>', horaSesion: '<%=sesion.getHora()%>'},
+                                            success: function(response) {
+                                                window.location.href = 'PaginaReservas.jsp';
+                                            },
+                                            error: function() {
+                                                alert('Error al procesar la solicitud');
+                                            }
+                                        });
+                                    });
+                                });
+                                </script>
                             </div>
                         <%}%>
                     </div>
                 </div>
             </div>
 
+            <script>
+                // Función para redirigir al hacer clic en el botón de reserva
+                function generarServletReserva() {
+                    ServletReserva();
+                }
+            </script>
+            
             <div class="contenedor informacionPelicula">
                 <div class="contenedorV">
                     <div class="titulo2">Comentarios:</div>
@@ -89,7 +117,9 @@
                     </form>
                 </div>
             </div>
+            
 
+                    
             <%ArrayList<String> comentarios = (ArrayList) session.getAttribute("comentarios_pelicula_seleccionada");%>
 
             <div class="contenedor informacionPelicula">

@@ -198,6 +198,26 @@ img{
     border-color: darkred;
 }
 
+.reservabutton{
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    border-width: 4px;
+    border-style: solid;
+    border-color: darkred;
+}
+
+.confirmarReserva{
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #2e2e2e;
+    color: rgb(204, 0, 0);
+    border-width: 4px;
+    border-style: solid;
+    border-color: darkred;
+}
+
 .comentario_pelicula{
     margin-bottom: 50px;
 }

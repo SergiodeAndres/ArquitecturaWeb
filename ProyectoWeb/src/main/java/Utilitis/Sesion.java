@@ -35,7 +35,7 @@ public class Sesion {
 
     public Time getHora() {
         return hora;
-    }
+    }   
 
     public void setHora(Time hora) {
         this.hora = hora;
