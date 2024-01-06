@@ -36,6 +36,14 @@
         <servlet-name>ServletConfirmarReserva</servlet-name>
         <servlet-class>Controlador.ServletConfirmarReserva</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InsertarPelicula</servlet-name>
+        <servlet-class>Controlador.InsertarPelicula</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EliminarPelicula</servlet-name>
+        <servlet-class>Controlador.EliminarPelicula</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CargarCartelera</servlet-name>
         <url-pattern>/CargarCartelera</url-pattern>
@@ -71,6 +79,14 @@
     <servlet-mapping>
         <servlet-name>ServletConfirmarReserva</servlet-name>
         <url-pattern>/ServletConfirmarReserva</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InsertarPelicula</servlet-name>
+        <url-pattern>/InsertarPelicula</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EliminarPelicula</servlet-name>
+        <url-pattern>/EliminarPelicula</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

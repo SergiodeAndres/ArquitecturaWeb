@@ -95,6 +95,44 @@ public class ModeloDatos {
         Pelicula peliculaSeleccionada = getPeliculas().get(nombre);
         return peliculaSeleccionada;
     }
+    
+    public void addPelicula (Pelicula pelicula){
+        String query = "INSERT INTO PELICULA VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, pelicula.getNombre());
+            queryCompleta.setString(2, pelicula.getSinopsis());
+            queryCompleta.setString(3, pelicula.getPaginaoficial());
+            queryCompleta.setString(4, pelicula.getTitulooriginal());
+            queryCompleta.setString(5, pelicula.getGenero());
+            queryCompleta.setString(6, pelicula.getNacionalidad());
+            queryCompleta.setInt(7, pelicula.getDuracion());
+            queryCompleta.setInt(8, pelicula.getAno());
+            queryCompleta.setString(9, pelicula.getDistribuidora());
+            queryCompleta.setString(10, pelicula.getDirector());
+            queryCompleta.setString(11, pelicula.getClasificacion());
+            queryCompleta.setString(12, pelicula.getImagen());
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha añadido la película");
+            System.out.println(ex);
+        }
+    }
+    
+    public void removePelicula (String nombrePelicula){
+        String query = "DELETE FROM PELICULA WHERE NOMBRE=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha eliminado la sala");
+            
+        }
+    }
 
     public ArrayList<String> getActores(String nombrePelicula){
         ArrayList<String> actores = new ArrayList<>();
@@ -111,6 +149,34 @@ public class ModeloDatos {
             System.out.println(e);
         }
         return actores;
+    }
+    
+    public void addActor(String nombrePelicula, String actor){
+        String query = "INSERT INTO PELICULATIENEACTOR VALUES (?, ?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.setString(2, actor);
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha añadido el actor");
+            System.out.println(ex);
+        }
+    }
+    
+    public void removeActoresPorPelicula (String nombrePelicula){
+        String query = "DELETE FROM PELICULATIENEACTOR WHERE NOMBREPELICULA=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No han eliminado los actores");
+            
+        }
     }
     
     public ArrayList<Sala> getSalas() {
@@ -294,6 +360,19 @@ public class ModeloDatos {
         }
     }
     
+    public void removeComentariosPorPelicula (String nombrePelicula){
+        String query = "DELETE FROM PELICULATIENECOMENTARIO WHERE NOMBREPELICULA=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No han eliminado los comentarios");
+            
+        }
+    }
+    
     public ArrayList<Usuario> getUsuarios() {
         ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
         abrirConexion();
@@ -409,6 +488,19 @@ public class ModeloDatos {
             }
         });
         return sesiones;
+    }
+    
+    public void removeSesionesPorPelicula (String nombrePelicula){
+        String query = "DELETE FROM SESION WHERE NOMBREPELICULA=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No han eliminado las sesiones");
+            
+        }
     }
     
     public void AddEntrada (Entrada entrada)

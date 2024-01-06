@@ -19,7 +19,7 @@
         <header>EsCineElCine</header>
         <nav class="menu">
             <ul>
-              <li><a class="option" href="/Cine/Cartelera.jsp">
+              <li><a class="option" href="Cartelera.jsp">
                 <p>Volver</p>
               </a></li>
             </ul>
