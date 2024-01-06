@@ -32,6 +32,7 @@ import java.util.HashMap;
 public class InsertarPelicula extends HttpServlet {
 
     private ModeloDatos bd;
+    //Poned la ruta de archivos donde guardais las imágenes en vuestro ordenador
     private String rutaArchivos = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\imagenes\\";
     private File uploads = new File(rutaArchivos);
     
