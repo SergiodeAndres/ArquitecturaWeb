@@ -26,12 +26,12 @@
         %>
         <a href ="AdminSalas.jsp">Administración de salas </a>
         <br>
-        <a href ="">Administración de Películas </a>
+        <a href ="AdminCartelera.jsp">Administración de Películas </a>
         <br>
         <a href ="">Administración de reservas </a>
         <br>
         <a href ="AdminEntradas.jsp">Administración de entradas y sesiones </a>
         <br>
-        <a href ="">Informes </a>
+        <a href ="Informes.jsp">Informes </a>
     </body>
 </html>

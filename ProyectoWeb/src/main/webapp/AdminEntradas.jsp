@@ -81,7 +81,51 @@ modeloDatos.abrirConexion();%>
             }
         }
         </script>
+        <h2>Añadir sesión en sala actual</h2>
+        <form id="formulario" action="SesionesServlet" method="post">
+            <input type="datetime-local" id= "nuevaSesion" name="fechaHora" required><br>
+            <input type="submit" value="Añadir sesión">
+        </form>
         
+        <script>
+        var fechaHoraActual = new Date();
+        fechaHoraActual.setTime(fechaHoraActual.getTime() + (1 * 60 * 60 * 1000));
+        var fechaHoraModificada = fechaHoraActual.toISOString().slice(0, -8);
+        document.getElementById('nuevaSesion').min = fechaHoraModificada;
+        
+        $(document).ready(function() {
+            $('#formulario').submit(function(event) {
+                event.preventDefault();
+                var formData = $(this).serialize() + '&modo=añadir&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                $.ajax({
+                    url: 'SesionesServlet',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.trim() !== "") {
+                            alert(response); 
+                            } else {
+                                var formData = 'modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                                    $.ajax({
+                                        url: 'SesionesServlet',
+                                        type: 'POST',
+                                        data: formData,
+                                        success: function(response) {
+                                            window.location.href = 'AdminEntradas.jsp';
+                                        },
+                                        error: function() {
+                                            alert('Error al procesar la solicitud');
+                                        }
+                                    });
+                                }
+                        },
+                    error: function() {
+                        alert('Error al procesar la solicitud');
+                    }
+                });
+            });
+        });
+        </script>
         <h2 id="enunciadoSesiones">Sesiones Actuales</h2>
         <% 
             ArrayList<Sesion> sesiones = (ArrayList<Sesion>) session.getAttribute("sesionesPeliculaActualSalaActual");
@@ -89,10 +133,15 @@ modeloDatos.abrirConexion();%>
             {
                 for (Sesion s: sesiones)
                 { %>
-                    <button id="Boton<%=s.getHora().toString().replaceAll(":", "")%>"><%= s.getFecha().toString() %> <%= s.getHora().toString() %></button>
+                    <%= s.getFecha().toString() %> <%= s.getHora().toString() %> 
+                    <button id="BotonEntradas<%=s.getHora().toString().replaceAll(":", "")%>">Ver entradas</button>
+                    <button id="BotonEliminar<%=s.getHora().toString().replaceAll(":", "")%>">Eliminar Sesión</button>
+                    <button id="BotonEditar<%=s.getHora().toString().replaceAll(":", "")%>">Editar Sesión</button>
+                    <button id="BotonAñadirEntradas<%=s.getHora().toString().replaceAll(":", "")%>">Añadir Entrada</button>
+                    <br>
                     <script>
                     $(document).ready(function() {
-                        $('#Boton<%=s.getHora().toString().replaceAll(":", "")%>').click(function() {
+                        $('#BotonEntradas<%=s.getHora().toString().replaceAll(":", "")%>').click(function() {
                             $.ajax({
                                 url: 'SesionesServlet',
                                 type: 'POST',
@@ -101,6 +150,72 @@ modeloDatos.abrirConexion();%>
                                 sesionFecha: '<%=s.getFecha().toString() %>'},
                                 success: function(response) {
                                     window.location.href = 'AdminEntradas.jsp';
+                                },
+                                error: function() {
+                                    alert('Error al procesar la solicitud');
+                                }
+                            });
+                        });
+                    });
+                    $(document).ready(function() {
+                        $('#BotonEliminar<%=s.getHora().toString().replaceAll(":", "")%>').click(function() {
+                            var respuesta = confirm("Se va a realizar la siguiente acción: \n Borrar Sesión seleccionada. \n ¿Desea continuar?");
+                            if (respuesta === true)
+                            {
+                                $.ajax({
+                                    url: 'SesionesServlet',
+                                    type: 'POST',
+                                    data: { modo: 'eliminarSesion', nombrePelicula: '<%=s.getNombrePelicula() %>',
+                                    nombreSala: '<%=s.getNombreSala() %>', sesionHora: '<%=s.getHora().toString() %>',
+                                    sesionFecha: '<%=s.getFecha().toString() %>'},
+                                    success: function(response) {
+                                        var formData = 'modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                                        $.ajax({
+                                            url: 'SesionesServlet',
+                                            type: 'POST',
+                                            data: formData,
+                                            success: function(response) {
+                                                window.location.href = 'AdminEntradas.jsp';
+                                            },
+                                            error: function() {
+                                                alert('Error al procesar la solicitud');
+                                            }
+                                        });
+                                    },
+                                    error: function() {
+                                        alert('Error al procesar la solicitud');
+                                    }
+                                });
+                            }
+                        });
+                    });
+                    $(document).ready(function() {
+                        $('#BotonEditar<%=s.getHora().toString().replaceAll(":", "")%>').click(function() {
+                            $.ajax({
+                                url: 'SesionesServlet',
+                                type: 'POST',
+                                data: { modo: 'redirigirEditarSesion', nombrePelicula: '<%=s.getNombrePelicula() %>',
+                                nombreSala: '<%=s.getNombreSala() %>', sesionHora: '<%=s.getHora().toString() %>',
+                                sesionFecha: '<%=s.getFecha().toString() %>'},
+                                success: function(response) {
+                                    window.location.href = 'EditarSesion.jsp';
+                                },
+                                error: function() {
+                                    alert('Error al procesar la solicitud');
+                                }
+                            });
+                        });
+                    });
+                    $(document).ready(function() {
+                        $('#BotonAñadirEntradas<%=s.getHora().toString().replaceAll(":", "")%>').click(function() {
+                            $.ajax({
+                                url: 'SesionesServlet',
+                                type: 'POST',
+                                data: { modo: 'redirigirAñadirEntrada', nombrePelicula: '<%=s.getNombrePelicula() %>',
+                                nombreSala: '<%=s.getNombreSala() %>', sesionHora: '<%=s.getHora().toString() %>',
+                                sesionFecha: '<%=s.getFecha().toString() %>'},
+                                success: function(response) {
+                                    window.location.href = 'AnadirEntrada.jsp';
                                 },
                                 error: function() {
                                     alert('Error al procesar la solicitud');
@@ -124,7 +239,64 @@ modeloDatos.abrirConexion();%>
             {
                 for (Entrada e: entradas)
                 { %>
-                    <button id="Boton">F<%= e.getFila()%>C<%= e.getColumna()%></button>
+                    F<%= e.getFila()%>C<%= e.getColumna()%>
+                    <button id="BotonEliminar<%=e.getFila()%><%=e.getColumna()%>">Eliminar Entrada</button>
+                    <button id="BotonEditar<%=e.getFila()%><%=e.getColumna()%>">Modificar Entrada</button>
+                    <script>
+                        $(document).ready(function() {
+                            $('#BotonEliminar<%=e.getFila()%><%=e.getColumna()%>').click(function() {
+                                var respuesta = confirm("Se va a realizar la siguiente acción: \n Borrar Entrada seleccionada. \n ¿Desea continuar?");
+                                if (respuesta === true)
+                                {
+                                    $.ajax({
+                                        url: 'SesionesServlet',
+                                        type: 'POST',
+                                        data: { modo: 'eliminarEntrada', nombrePelicula: '<%=e.getNombrePelicula() %>',
+                                        nombreSala: '<%=e.getNombreSala() %>', entradaHora: '<%=e.getHora().toString() %>',
+                                        entradaFecha: '<%=e.getFecha().toString() %>' ,entradaFila: '<%= e.getFila() %>',
+                                        entradaColumna:'<%=e.getColumna() %>'},
+                                        success: function(response) {
+                                            $.ajax({
+                                                url: 'SesionesServlet',
+                                                type: 'POST',
+                                                data: { modo: 'buscarEntradas', nombrePelicula: '<%=e.getNombrePelicula() %>',
+                                                nombreSala: '<%=e.getNombreSala() %>', sesionHora: '<%=e.getHora().toString() %>',
+                                                sesionFecha: '<%=e.getFecha().toString() %>'},
+                                                success: function(response) {
+                                                    window.location.href = 'AdminEntradas.jsp';
+                                                },
+                                                error: function() {
+                                                    alert('Error al procesar la solicitud');
+                                                }
+                                            });
+                                        },
+                                        error: function() {
+                                            alert('Error al procesar la solicitud');
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                        $(document).ready(function() {
+                            $('#BotonEditar<%=e.getFila()%><%=e.getColumna()%>').click(function() {
+                                $.ajax({
+                                    url: 'SesionesServlet',
+                                    type: 'POST',
+                                    data: { modo: 'redirigirEditarEntrada', nombrePelicula: '<%=e.getNombrePelicula() %>',
+                                    nombreSala: '<%=e.getNombreSala() %>', sesionHora: '<%=e.getHora().toString() %>',
+                                    sesionFecha: '<%=e.getFecha().toString() %>', entradaFila:'<%=e.getFila()%>',
+                                    entradaColumna:'<%=e.getColumna()%>'},
+                                    success: function(response) {
+                                        window.location.href = 'EditarEntrada.jsp';
+                                    },
+                                    error: function() {
+                                        alert('Error al procesar la solicitud');
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                    <br>
                 <%}
             }
         %>
@@ -133,29 +305,13 @@ modeloDatos.abrirConexion();%>
             var peliculaSeleccionada = $("#seleccionPelicula").val();
             var salaSeleccionada = $("#seleccionSala").val();
             $('#enunciadoSesiones').text('Sesiones de ' + peliculaSeleccionada + ' en ' + salaSeleccionada);
+        </script>
+        <script>
             $(document).ready(function() {
                 $('#seleccionSala').change(function() {
                     salaSeleccionada = $(this).val();
                     $('#enunciadoSesiones').text('Sesiones de ' + peliculaSeleccionada + ' en ' + salaSeleccionada);
-                    var formData = '&modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
-                    $.ajax({
-                        url: 'SesionesServlet',
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            window.location.href = 'AdminEntradas.jsp';
-                        },
-                        error: function() {
-                            alert('Error al procesar la solicitud');
-                        }
-                    });
-                });
-            });
-            $(document).ready(function() {
-                $('#seleccionPelicula').change(function() {
-                    peliculaSeleccionada = $(this).val();
-                    $('#enunciadoSesiones').text('Sesiones de ' + peliculaSeleccionada + ' en ' + salaSeleccionada);
-                    var formData = '&modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                    var formData = 'modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
                     $.ajax({
                         url: 'SesionesServlet',
                         type: 'POST',
@@ -170,51 +326,25 @@ modeloDatos.abrirConexion();%>
                 });
             });
         </script>
-        
-        <h2>Añadir sesión en sala actual</h2>
-        <form id="formulario" action="SalasServlet" method="post">
-            <input type="datetime-local" id= "nuevaSesion" name="fechaHora" required><br>
-            <input type="submit" value="Añadir sesión">
-        </form>
-        
         <script>
-        var fechaHoraActual = new Date();
-        fechaHoraActual.setTime(fechaHoraActual.getTime() + (1 * 60 * 60 * 1000));
-        var fechaHoraModificada = fechaHoraActual.toISOString().slice(0, -8);
-        document.getElementById('nuevaSesion').min = fechaHoraModificada;
-        
-        $(document).ready(function() {
-            $('#formulario').submit(function(event) {
-                event.preventDefault();
-                var formData = $(this).serialize() + '&modo=añadir&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
-                $.ajax({
-                    url: 'SesionesServlet',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.trim() !== "") {
-                            alert(response); 
-                            } else {
-                                var formData = '&modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
-                                    $.ajax({
-                                        url: 'SesionesServlet',
-                                        type: 'POST',
-                                        data: formData,
-                                        success: function(response) {
-                                            window.location.href = 'AdminEntradas.jsp';
-                                        },
-                                        error: function() {
-                                            alert('Error al procesar la solicitud');
-                                        }
-                                    });
-                                }
+            $(document).ready(function() {
+                $('#seleccionPelicula').change(function() {
+                    peliculaSeleccionada = $(this).val();
+                    $('#enunciadoSesiones').text('Sesiones de ' + peliculaSeleccionada + ' en ' + salaSeleccionada);
+                    var formData = 'modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                    $.ajax({
+                        url: 'SesionesServlet',
+                        type: 'POST',
+                        data: formData,
+                        success: function(response) {
+                            window.location.href = 'AdminEntradas.jsp';
                         },
-                    error: function() {
-                        alert('Error al procesar la solicitud');
-                    }
+                        error: function() {
+                            alert('Error al procesar la solicitud');
+                        }
+                    });
                 });
             });
-        });
         </script>
     </body>
 </html>

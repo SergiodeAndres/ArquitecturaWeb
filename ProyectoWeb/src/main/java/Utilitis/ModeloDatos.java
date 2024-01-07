@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.sql.*;
 import java.util.Iterator;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -609,9 +610,13 @@ public class ModeloDatos {
             queryCompleta.setString(2, pelicula);
             ResultSet rs = queryCompleta.executeQuery();
             while (rs.next()) {
-                Sesion s = new Sesion(rs.getDate(1), rs.getTime(2), 
+                if(LocalDateTime.now().isBefore(LocalDateTime.of(
+                        rs.getDate(1).toLocalDate(), rs.getTime(2).toLocalTime())))
+                {
+                    Sesion s = new Sesion(rs.getDate(1), rs.getTime(2), 
                         rs.getString(3), rs.getString(4));
-                sesiones.add(s);
+                    sesiones.add(s);
+                }
             }
             rs.close();
         } 
@@ -686,11 +691,153 @@ public class ModeloDatos {
             System.out.println("No ha añadido la sala");
             
         }
-        for (Entrada e: entradas)
-                { 
-                    System.out.println("Fila " + e.getFila() + " Columna" + e.getColumna());
-                }
         return entradas; 
+    }
+    
+    public void RemoveSesion (Sesion sesion)
+    {
+        String query = "DELETE FROM sesion WHERE fecha = ? AND hora = ? AND nombresala = ? AND nombrepelicula = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setDate(1, sesion.getFecha());
+            queryCompleta.setTime(2, sesion.getHora());
+            queryCompleta.setString(3, sesion.getNombreSala());
+            queryCompleta.setString(4, sesion.getNombrePelicula());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha eliminado la sesión");
+            
+        }
+    }
+    
+    public void RemoveEntrada (Entrada entrada)
+    {
+        String query = "DELETE FROM entrada WHERE fecha = ? AND hora = ? AND nombresala = ? AND "
+                + "fila = ? AND columna = ? AND nombrepelicula = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setDate(1, entrada.getFecha());
+            queryCompleta.setTime(2, entrada.getHora());
+            queryCompleta.setString(3, entrada.getNombreSala());
+            queryCompleta.setInt(4, entrada.getFila());
+            queryCompleta.setInt(5, entrada.getColumna());
+            queryCompleta.setString(6, entrada.getNombrePelicula());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha eliminado la entrada");
+            
+        }
+    }
+    
+    public ArrayList<Sesion> getSesionesSala (String sala)
+    {
+        ArrayList<Sesion> sesiones = new ArrayList<Sesion>(); 
+        String query = "SELECT * FROM Sesion WHERE nombresala = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, sala);
+            ResultSet rs = queryCompleta.executeQuery();
+            while (rs.next()) {
+                if(LocalDateTime.now().isBefore(LocalDateTime.of(
+                        rs.getDate(1).toLocalDate(), rs.getTime(2).toLocalTime())))
+                {
+                    Sesion s = new Sesion(rs.getDate(1), rs.getTime(2), 
+                        rs.getString(3), rs.getString(4));
+                    sesiones.add(s);
+                }
+            }
+            rs.close();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha leido de la tabla");
+        }
+        Collections.sort(sesiones, new Comparator<Sesion>() {
+            @Override
+            public int compare(Sesion s1, Sesion s2) {
+                int fechaComparacion = s1.getFecha().compareTo(s2.getFecha());
+                if (fechaComparacion != 0) {
+                    return fechaComparacion;
+                } else {
+                    return s1.getHora().compareTo(s2.getHora());
+                }
+            }
+        });
+        return sesiones;
+    }
+    
+    public void UpdateSesion (Sesion sesion, Sesion sesionAntigua)
+    {
+        String query = "UPDATE Sesion SET fecha = ?, hora = ?, nombresala = ?, nombrepelicula = ? "
+                + "WHERE fecha = ? AND hora = ? AND nombresala = ? AND nombrepelicula = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setDate(1, sesion.getFecha());
+            queryCompleta.setTime(2, sesion.getHora());
+            queryCompleta.setString(3, sesion.getNombreSala());
+            queryCompleta.setString(4, sesion.getNombrePelicula());
+            queryCompleta.setDate(5, sesionAntigua.getFecha());
+            queryCompleta.setTime(6, sesionAntigua.getHora());
+            queryCompleta.setString(7, sesionAntigua.getNombreSala());
+            queryCompleta.setString(8, sesionAntigua.getNombrePelicula());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sesión");
+            System.out.println(ex.toString());
+            
+        }
+    }
+    
+    public boolean ExisteEntrada (Entrada entrada)
+    {
+        //TODO: MIRAR QUE NO ESTE EN UNA RESERVA
+        boolean veredicto = false; 
+        ArrayList<Entrada> entradas = getEntradasSesion(entrada.getNombrePelicula(), entrada.getNombreSala(), 
+                entrada.getFecha().toString(), entrada.getHora().toString()); 
+        for (Entrada e: entradas)
+        {
+            if (e.getColumna() == entrada.getColumna() && e.getFila() == entrada.getFila())
+            {
+                veredicto = true;
+            }
+        }
+        return veredicto; 
+    }
+    public boolean ExisteSesion (Sesion sesion)
+    {
+        boolean veredicto = false;
+        ArrayList<Sesion> sesiones = getSesiones(sesion.getNombrePelicula());
+        for (Sesion s : sesiones)
+        {
+            if (s.getNombreSala().equals(sesion.getNombreSala()) && 
+                    s.getFecha().equals(sesion.getFecha()) && s.getHora().equals(sesion.getHora()))
+            {
+                veredicto = true;
+            }
+        }
+        return veredicto;
+    }
+    public ArrayList<String> getGeneros() {
+        ArrayList<String> generos = new ArrayList<String>();
+        abrirConexion();
+        try
+        { 
+        statement = conexion.createStatement();
+        setResultado = statement.executeQuery("SELECT DISTINCT Genero FROM Pelicula");
+        while (setResultado.next())
+        {
+        String genero = setResultado.getString("Genero");
+        generos.add(genero);
+        }
+        setResultado.close();
+        statement.close();
+        }
+        catch(Exception e){
+        System.out.println("No lee de la tabla");
+        }
+        return generos; 
     }
 
     public void cerrarConexion() {

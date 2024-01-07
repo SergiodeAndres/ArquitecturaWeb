@@ -48,6 +48,10 @@
         <servlet-name>ModificarPelicula</servlet-name>
         <servlet-class>Controlador.ModificarPelicula</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>InformesServlet</servlet-name>
+        <servlet-class>Controlador.InformesServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CargarCartelera</servlet-name>
         <url-pattern>/CargarCartelera</url-pattern>
@@ -95,6 +99,10 @@
     <servlet-mapping>
         <servlet-name>ModificarPelicula</servlet-name>
         <url-pattern>/ModificarPelicula</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>InformesServlet</servlet-name>
+        <url-pattern>/InformesServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
