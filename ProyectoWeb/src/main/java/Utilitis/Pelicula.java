@@ -147,4 +147,16 @@ public class Pelicula {
     public void setActores(ArrayList<String> actores) {
         this.actores = actores;
     }
+    
+    public String mostrarActores(){
+        String cadena="";
+        
+        for (int i = 0; i<actores.size()-1; i++){
+            cadena += actores.get(i)+ ", ";
+        }
+        
+        cadena += actores.get(actores.size()-1);
+        
+        return cadena;
+    }
 }

@@ -44,6 +44,10 @@
         <servlet-name>EliminarPelicula</servlet-name>
         <servlet-class>Controlador.EliminarPelicula</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ModificarPelicula</servlet-name>
+        <servlet-class>Controlador.ModificarPelicula</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>CargarCartelera</servlet-name>
         <url-pattern>/CargarCartelera</url-pattern>
@@ -87,6 +91,10 @@
     <servlet-mapping>
         <servlet-name>EliminarPelicula</servlet-name>
         <url-pattern>/EliminarPelicula</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModificarPelicula</servlet-name>
+        <url-pattern>/ModificarPelicula</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

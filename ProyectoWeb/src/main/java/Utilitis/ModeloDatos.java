@@ -133,6 +133,60 @@ public class ModeloDatos {
             
         }
     }
+    
+    public void updatePelicula (Pelicula pelicula, String antiguoNombrePelicula){
+        String query = "UPDATE PELICULA SET NOMBRE=?, SINOPSIS=?, PAGINAOFICIAL=?, TITULOORIGINAL=?, GENERO=?, NACIONALIDAD=?,"
+                + " DURACION=?, AÑO=?, DISTRIBUIDORA=?, DIRECTOR=?, CLASIFICACION=?, PORTADA=? WHERE NOMBRE=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, pelicula.getNombre());
+            queryCompleta.setString(2, pelicula.getSinopsis());
+            queryCompleta.setString(3, pelicula.getPaginaoficial());
+            queryCompleta.setString(4, pelicula.getTitulooriginal());
+            queryCompleta.setString(5, pelicula.getGenero());
+            queryCompleta.setString(6, pelicula.getNacionalidad());
+            queryCompleta.setInt(7, pelicula.getDuracion());
+            queryCompleta.setInt(8, pelicula.getAno());
+            queryCompleta.setString(9, pelicula.getDistribuidora());
+            queryCompleta.setString(10, pelicula.getDirector());
+            queryCompleta.setString(11, pelicula.getClasificacion());
+            queryCompleta.setString(12, pelicula.getImagen());
+            queryCompleta.setString(13, antiguoNombrePelicula);
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha modificado la película");
+            System.out.println(ex);
+        }
+    }
+    
+    public void quitarConstraintActores(){
+        String query = "ALTER TABLE PELICULATIENEACTOR DROP CONSTRAINT FK_NOMBREPELICULA";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha eliminado la constrait de actor");
+            System.out.println(ex);
+        }
+    }
+    
+    public void ponerConstraintActores(){
+        String query = "ALTER TABLE PELICULATIENEACTOR ADD CONSTRAINT FK_NOMBREPELICULA"
+                + " FOREIGN KEY (NOMBREPELICULA) REFERENCES PELICULA(NOMBRE)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha añadido la constrait de actor");
+            System.out.println(ex);
+        }
+    }
 
     public ArrayList<String> getActores(String nombrePelicula){
         ArrayList<String> actores = new ArrayList<>();
@@ -166,11 +220,39 @@ public class ModeloDatos {
         }
     }
     
+    public void updateActores(String nuevoNombrePelicula, String antiguoNombrePelicula){
+        String query = "UPDATE PELICULATIENEACTOR SET NOMBREPELICULA=? WHERE NOMBREPELICULA=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nuevoNombrePelicula);
+            queryCompleta.setString(2, antiguoNombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se han actualizado los actores");
+            
+        }
+    }
+    
     public void removeActoresPorPelicula (String nombrePelicula){
         String query = "DELETE FROM PELICULATIENEACTOR WHERE NOMBREPELICULA=?";
         try {
             PreparedStatement queryCompleta = conexion.prepareStatement(query);
             queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No han eliminado los actores");
+            
+        }
+    }
+    
+    public void removeActoresPorPeliculaActor (String nombrePelicula, String actor){
+        String query = "DELETE FROM PELICULATIENEACTOR WHERE NOMBREPELICULA=? AND NOMBREACTOR=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nombrePelicula);
+            queryCompleta.setString(2, actor);
             queryCompleta.executeUpdate();
         } 
         catch (SQLException ex) {
@@ -327,6 +409,52 @@ public class ModeloDatos {
         return sesiones;
     }
     
+    public boolean existeSesionParaPelicula(String nombrePelicula){
+        boolean existe = false;
+        int contador=0;
+        try {
+            Statement set = conexion.createStatement();
+            ResultSet rs = set.executeQuery("SELECT NOMBRESALA FROM SESION WHERE NOMBREPELICULA = " + "'" + nombrePelicula + "'");
+            while(rs.next()){
+                contador++;
+            }
+            existe = contador>0;
+            rs.close();
+            set.close();
+        } catch (Exception e) {
+            System.out.println("No coge de la tabla");
+            System.out.println(e);
+        }
+        return existe;
+    }
+    
+    public void quitarConstraintComentarios(){
+        String query = "ALTER TABLE PELICULATIENECOMENTARIO DROP CONSTRAINT FK_NOMBREPELICULA2";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha eliminado la constrait de comentario");
+            System.out.println(ex);
+        }
+    }
+    
+    public void ponerConstraintComentarios(){
+        String query = "ALTER TABLE PELICULATIENECOMENTARIO ADD CONSTRAINT FK_NOMBREPELICULA2"
+                + " FOREIGN KEY (NOMBREPELICULA) REFERENCES PELICULA(NOMBRE)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se ha añadido la constrait de comentario");
+            System.out.println(ex);
+        }
+    }
+    
     public ArrayList<String> getComentarios(String nombrePelicula){
         ArrayList<String> comentarios = new ArrayList<>();
         
@@ -356,6 +484,20 @@ public class ModeloDatos {
         } 
         catch (SQLException ex) {
             System.out.println("No ha añadido el comentario");
+            
+        }
+    }
+    
+    public void updateComentarios(String nuevoNombrePelicula, String antiguoNombrePelicula){
+        String query = "UPDATE PELICULATIENECOMENTARIO SET NOMBREPELICULA=? WHERE NOMBREPELICULA=?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, nuevoNombrePelicula);
+            queryCompleta.setString(2, antiguoNombrePelicula);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No se han actualizado los comentarios");
             
         }
     }

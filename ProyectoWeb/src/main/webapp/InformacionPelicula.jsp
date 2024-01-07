@@ -46,17 +46,7 @@
                     <p>Distribuidora: <%=peliculaSeleccionada.getDistribuidora()%>.</p>
                     <p>Director: <%=peliculaSeleccionada.getDirector()%>.</p>
                     <p>Clasificación: <%=peliculaSeleccionada.getClasificacion()%>.</p>
-                    <%
-                        ArrayList<String> actores = peliculaSeleccionada.getActores();
-                        
-                        
-                        String cadena = "";
-                        
-                        for (String nombre:actores){
-                            cadena += nombre + ", ";
-                        }
-                    %>
-                    <p>Actores: <%=cadena%>.</p>
+                    <p>Actores: <%=peliculaSeleccionada.mostrarActores()%>.</p>
                 </div>
             </div>
         </div>
