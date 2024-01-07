@@ -22,6 +22,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Arrays;
 
 /**
  *
@@ -38,24 +39,24 @@ public class ServletConfirmarReserva extends HttpServlet {
     }
     
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        HttpSession s = req.getSession(true);
+        HttpSession s = req.getSession(false);
 
-        String nombrePelicula= req.getParameter("nombrePelicula");
-        String nombreSala= req.getParameter("nombreSala");
-        String fechaSesion= req.getParameter("fechaSesion");
-        String horaSesion= req.getParameter("horaSesion");
+        String asientosSeleccionados= req.getParameter("asientosSeleccionados");
         
-        Sala sala = bd.getSalaNombre(nombreSala);
+        ArrayList<String> listaAsientos= new ArrayList<String> (Arrays.asList(asientosSeleccionados.split("\\s")));
+        ArrayList<String> filasReservadas =new ArrayList<String>();
+        ArrayList<String> columnasReservadas =new ArrayList<String>();
+        for (int i=0; i< listaAsientos.size();i++){
+            listaAsientos.set(i,listaAsientos.get(i).replaceAll("asiento_", ""));
+            filasReservadas.add(Arrays.asList(listaAsientos.get(i).split("_")).get(0));
+            columnasReservadas.add(Arrays.asList(listaAsientos.get(i).split("_")).get(1));
+        }
+        s.setAttribute("listaAsientosReservados",listaAsientos);
+        s.setAttribute("filasReservadas",filasReservadas);
+        s.setAttribute("columnasReservadas",columnasReservadas);
         
-        ArrayList<Entrada> entradas = new ArrayList<>();
-        entradas = (bd.getEntradasSesion(nombrePelicula,nombreSala,fechaSesion,horaSesion));
+        res.sendRedirect(res.encodeRedirectURL("PasarelaPago.jsp"));
         
-        s.setAttribute("entradasSesion", entradas);
-        s.setAttribute("salaActual",sala);
-        
-        System.out.println("Me ejecuto");
-        
-        res.sendRedirect(res.encodeRedirectURL("PaginaReservas.jsp"));
     }
 
     public void destroy() {

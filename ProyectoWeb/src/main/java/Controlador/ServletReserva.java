@@ -38,7 +38,7 @@ public class ServletReserva extends HttpServlet {
     }
     
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        HttpSession s = req.getSession(true);
+        HttpSession s = req.getSession(false);
 
         String nombrePelicula= req.getParameter("nombrePelicula");
         String nombreSala= req.getParameter("nombreSala");
@@ -52,6 +52,11 @@ public class ServletReserva extends HttpServlet {
         
         s.setAttribute("entradasSesion", entradas);
         s.setAttribute("salaActual",sala);
+        s.setAttribute("nombrePelicula",nombrePelicula);
+        s.setAttribute("nombreSala",nombreSala);
+        s.setAttribute("fechaSesion",fechaSesion);
+        s.setAttribute("horaSesion",horaSesion);
+        
         
         System.out.println("Me ejecuto");
         

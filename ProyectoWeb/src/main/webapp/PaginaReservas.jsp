@@ -7,6 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <title>Reserva de Asientos</title>
     <style>
         body {
@@ -50,11 +51,16 @@
             background-color: #ff0000;
         }
     </style>
+    <% ArrayList<Entrada> entradas = (ArrayList) session.getAttribute("entradasSesion"); %>
+    <% Sala sala = (Sala) session.getAttribute("salaActual"); %>
+    <div style="margin-bottom: 30px ; font-size: 30px">
+            <%=entradas.get(0).getNombrePelicula()%> <%=sala.getNombre()%> <%=entradas.get(0).getFecha()%> <%=entradas.get(0).getHora()%>
+            
+    </div>
+
 </head>
-    <body>
+    <body style="margin-top: 20px;">
         
-        <% ArrayList<Entrada> entradas = (ArrayList) session.getAttribute("entradasSesion"); %>
-        <% Sala sala = (Sala) session.getAttribute("salaActual"); %>
         <div id="pantalla"></div>
         <%  %>
         <%-- Generar asientos dinámicamente (por ejemplo, 5 filas y 10 columnas) --%>
@@ -81,33 +87,26 @@
                 asiento.classList.toggle("reservado"); // Agrega o quita la clase 'reservado'
             }
         </script>
-        <button class="confirmarReserva" id="confirmarReserva" onclick="mostrarAsientosReservados()">
+        <button class="confirmarReserva" id="confirmarReserva">
             Confirma tu Reserva
+            
         </button>
-        <script>
-            function mostrarAsientosReservados() {
-                var asientosReservados = document.getElementsByClassName("reservado");
-
-                if (asientosReservados.length > 0) {
-                    var asientosReservadosString = "Asientos Reservados: ";
-                    for (var i = 0; i < asientosReservados.length; i++) {
-                        asientosReservadosString += asientosReservados[i].id + " ";
-                    }
-                    alert(asientosReservadosString);
-                } else {
-                    alert("No hay asientos reservados.");
-                }
-            }
-        </script>
+            
+       
         <script>
             $(document).ready(function() {
                 $('#confirmarReserva').click(function() {
+                    var asientosReservados = document.getElementsByClassName("reservado");
+                    var asientosReservadosString = "";
+                    for (var i = 0; i < asientosReservados.length; i++) {
+                        asientosReservadosString += asientosReservados[i].id + " ";
+                    }
                     $.ajax({
                         url: 'ServletConfirmarReserva',
                         type: 'POST',
-                        data: { },
+                        data: { asientosSeleccionados: asientosReservadosString },
                         success: function(response) {
-                            window.location.href = 'PaginaReservas.jsp';
+                            window.location.href = 'PasarelaPago.jsp';
                         },
                         error: function() {
                             alert('Error al procesar la solicitud');

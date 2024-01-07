@@ -16,6 +16,7 @@ public class ModeloDatos {
     private Connection conexion;
     private Statement statement;
     private ResultSet setResultado;
+    
 
     public void abrirConexion() {
         try {
@@ -838,6 +839,119 @@ public class ModeloDatos {
         System.out.println("No lee de la tabla");
         }
         return generos; 
+    }
+    public boolean comprobarTarjeta(String numeroTarjeta, double pago){
+        abrirConexion();
+        System.out.println(numeroTarjeta);
+        int contador=0;
+        boolean tarjetaValida = true;
+        boolean condicion = true;
+        String query = "SELECT * FROM TARJETA WHERE NUMEROTARJETA = ?";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1, numeroTarjeta);
+            ResultSet rs = queryCompleta.executeQuery();
+            while(rs.next()){
+                contador++;
+            }
+            condicion=contador>0;
+            System.out.println(contador);
+            
+            if (!condicion){
+                tarjetaValida=false;
+                System.out.println("Error de tarjeta");
+            }else{
+                rs = queryCompleta.executeQuery();
+                while(rs.next()){
+                    if (pago > rs.getDouble("SALDO")){
+                        System.out.println("Error de saldo");
+                        tarjetaValida=false;
+                    }
+                    System.out.println("Hola");
+                }   
+            }
+            rs.close();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha leido de la tabla");
+        }
+        return tarjetaValida; 
+    }
+    
+    public void insertarReservaTieneAsiento(String referencia,int fila, int columna){
+        abrirConexion();
+        String query = "INSERT INTO RESERVATIENEASIENTOS VALUES (?,?,?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1,referencia);
+            queryCompleta.setInt(2, fila);
+            queryCompleta.setInt(3, columna);
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sesión");
+            System.out.println(ex.toString());
+            
+        }
+    }
+    
+    public void insertarReserva(Reserva r){
+        abrirConexion();
+        String query = "INSERT INTO RESERVA VALUES (?,?,?,?,?)";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setString(1,r.getNombrePelicula());
+            queryCompleta.setDate(2, r.getFecha());
+            queryCompleta.setTime(3, r.getHora());
+            queryCompleta.setString(4, r.getNombreSala());
+            queryCompleta.setString(5, r.getReferencia());
+            queryCompleta.executeUpdate();
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sesión");
+            System.out.println(ex.toString());
+            
+        }
+    }
+    public boolean existeReferencia(String r){
+        abrirConexion();
+        boolean referenciaValida = true;
+        boolean condicion = true;
+        
+        try {
+            statement = conexion.createStatement();
+            setResultado = statement.executeQuery("SELECT REFERENCIA FROM RESERVA WHERE REFERENCIA='"+r+"'");
+            condicion = setResultado.next();
+            if (!condicion)
+            {
+                referenciaValida = false;
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(ModeloDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+        return referenciaValida;
+    }
+    
+    public void restarSaldo(String tarjeta,double pago){
+        abrirConexion();
+        try {
+            statement = conexion.createStatement();
+            setResultado = statement.executeQuery("SELECT SALDO FROM TARJETA WHERE NUMEROTARJETA='"+tarjeta+"'");
+            double saldo=0;
+            while (setResultado.next()){   
+                saldo=setResultado.getDouble("SALDO");
+            }
+            double saldofinal=saldo-pago;
+            String query = "UPDATE TARJETA SET saldo = ? WHERE numerotarjeta = ?";
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            queryCompleta.setDouble(1, saldofinal);
+            queryCompleta.setString(2, tarjeta);
+            queryCompleta.executeUpdate();
+            
+        }catch (SQLException ex){
+            System.out.println(ex.toString());
+        }
     }
 
     public void cerrarConexion() {
