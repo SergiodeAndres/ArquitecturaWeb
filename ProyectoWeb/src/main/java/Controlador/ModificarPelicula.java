@@ -49,76 +49,67 @@ public class ModificarPelicula extends HttpServlet {
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         HttpSession s = req.getSession(true);
         
-        Iterator <String> it = req.getParameterNames().asIterator();
-        
-        int contador = 0;
-       
-        while (it.hasNext() && contador<10){
-            System.out.println(it.next());
-            contador++;
-        }
-        try{
-            Pelicula peliculaSeleccionada = (Pelicula) s.getAttribute("datos_pelicula_seleccionada");
-            HashMap <String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
+        Pelicula peliculaSeleccionada = (Pelicula) s.getAttribute("datos_pelicula_seleccionada");
+        HashMap <String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
 
-            String nombre = req.getParameter("nombrePelicula");
+        String nombre = req.getParameter("nombrePelicula");
             
-            System.out.println(peliculasPorNombre.keySet().toString());
+        System.out.println(peliculasPorNombre.keySet().toString());
             
-            System.out.println(nombre);
+        System.out.println(nombre);
             
-            System.out.println(peliculasPorNombre.containsKey(nombre));
+        System.out.println(peliculasPorNombre.containsKey(nombre));
 
-            if (!peliculasPorNombre.containsKey(nombre)){
+        if (!peliculasPorNombre.containsKey(nombre)){
 
-                if (!bd.existeSesionParaPelicula(peliculaSeleccionada.getNombre())){
+            if (!bd.existeSesionParaPelicula(peliculaSeleccionada.getNombre())){
 
-                    String sinopsis = req.getParameter("sinopsisPelicula");
-                    String paginaOficial = req.getParameter("paginaOficialPelicula");
-                    String tituloOriginal = req.getParameter("tituloOriginalPelicula");
-                    String genero = req.getParameter("generoPelicula");
-                    String nacionalidad = req.getParameter("nacionalidadPelicula");
-                    int duracion = Integer.parseInt(req.getParameter("duracionPelicula"));
-                    int fecha = Integer.parseInt(req.getParameter("fechaPelicula"));
-                    String distribuidora = req.getParameter("distribuidoraPelicula");
-                    String director = req.getParameter("directorPelicula");
-                    String clasificacion = req.getParameter("clasificacionPelicula");
-                    Part portada = req.getPart("portadaPelicula");
-                    String actores = req.getParameter("actoresPelicula");
+                String sinopsis = req.getParameter("sinopsisPelicula");
+                String paginaOficial = req.getParameter("paginaOficialPelicula");
+                String tituloOriginal = req.getParameter("tituloOriginalPelicula");
+                String genero = req.getParameter("generoPelicula");
+                String nacionalidad = req.getParameter("nacionalidadPelicula");
+                int duracion = Integer.parseInt(req.getParameter("duracionPelicula"));
+                int fecha = Integer.parseInt(req.getParameter("fechaPelicula"));
+                String distribuidora = req.getParameter("distribuidoraPelicula");
+                String director = req.getParameter("directorPelicula");
+                String clasificacion = req.getParameter("clasificacionPelicula");
+                Part portada = req.getPart("portadaPelicula");
+                String actores = req.getParameter("actoresPelicula");
 
-                    System.out.println("Tomo los parámetros del req");
+                System.out.println("Tomo los parámetros del req");
                     
-                    Pelicula p = new Pelicula(nombre, sinopsis, paginaOficial, tituloOriginal, genero, 
-                            nacionalidad, duracion, fecha, distribuidora, director, clasificacion, 
-                            modificarImagen(portada, peliculaSeleccionada.getImagen()), procesarActores(actores));
+                Pelicula p = new Pelicula(nombre, sinopsis, paginaOficial, tituloOriginal, genero, 
+                        nacionalidad, duracion, fecha, distribuidora, director, clasificacion, 
+                        modificarImagen(portada, peliculaSeleccionada.getImagen()), procesarActores(actores));
 
-                    bd.quitarConstraintActores();
-                    bd.quitarConstraintComentarios();
+                bd.quitarConstraintActores();
+                bd.quitarConstraintComentarios();
 
-                    bd.updateComentarios(nombre, peliculaSeleccionada.getNombre());
-                    modificarActores(nombre, peliculaSeleccionada.getNombre(),
-                            p.getActores(), peliculaSeleccionada.getActores());
-                    bd.updatePelicula(p, peliculaSeleccionada.getNombre());
+                bd.updateComentarios(nombre, peliculaSeleccionada.getNombre());
+                modificarActores(nombre, peliculaSeleccionada.getNombre(),
+                        p.getActores(), peliculaSeleccionada.getActores());
+                bd.updatePelicula(p, peliculaSeleccionada.getNombre());
 
-                    bd.ponerConstraintActores();
-                    bd.ponerConstraintComentarios();
+                bd.ponerConstraintActores();
+                bd.ponerConstraintComentarios();
 
-                    peliculasPorNombre.remove(peliculaSeleccionada.getNombre());
+                peliculasPorNombre.remove(peliculaSeleccionada.getNombre());
 
-                    peliculasPorNombre.put(nombre, p);
+                peliculasPorNombre.put(nombre, p);
 
-                    s.setAttribute("peliculas", peliculasPorNombre);
+                s.setAttribute("peliculas", peliculasPorNombre);
 
                 } else{
-                    System.out.println("Esta película tiene sesiones asociadas");
+                    PrintWriter out = res.getWriter();
+                    out.println("Esta película tiene sesiones asociadas, no se puede modificar.");
                 }
 
             } else {
-                System.out.println("Ya hay una película con dicho nombre, pruebe otro");
+                PrintWriter out = res.getWriter();
+                out.println("Ya hay una película con dicho nombre, pruebe otro.");
             }
-        } catch(Exception e){
-            System.out.println(e);
-        }
+        
 
         res.sendRedirect(res.encodeRedirectURL("AdminCartelera.jsp"));
     }
@@ -163,14 +154,9 @@ public class ModificarPelicula extends HttpServlet {
             File file = new File(rutaAbsoluta);
             
             if (file.exists()){
-                if (file.delete()){
-                    System.out.println("Archivo eliminado correctamente");
-                }else{
-                    System.out.println("Archivo no eliminado.");
-                }
-            }else{
-                System.out.println("Archivo no existe.");
+                file.delete();
             }
+            
         } catch(Exception e){
             System.out.println(e);
         }

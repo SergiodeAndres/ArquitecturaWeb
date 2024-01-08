@@ -45,34 +45,42 @@ public class InsertarPelicula extends HttpServlet {
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         HttpSession s = req.getSession(true);
         
-        String nombre = req.getParameter("nombrePelicula");
-        String sinopsis = req.getParameter("sinopsisPelicula");
-        String paginaOficial = req.getParameter("paginaOficialPelicula");
-        String tituloOriginal = req.getParameter("tituloOriginalPelicula");
-        String genero = req.getParameter("generoPelicula");
-        String nacionalidad = req.getParameter("nacionalidadPelicula");
-        int duracion = Integer.parseInt(req.getParameter("duracionPelicula"));
-        int fecha = Integer.parseInt(req.getParameter("fechaPelicula"));
-        String distribuidora = req.getParameter("distribuidoraPelicula");
-        String director = req.getParameter("directorPelicula");
-        String clasificacion = req.getParameter("clasificacionPelicula");
-        Part portada = req.getPart("portadaPelicula");
-        String actores = req.getParameter("actoresPelicula");
-        
-        Pelicula p = new Pelicula(nombre, sinopsis, paginaOficial, tituloOriginal, genero, 
-                nacionalidad, duracion, fecha, distribuidora, director, clasificacion, 
-                guardarImagen(portada, uploads), procesarActores(actores));
-        
-        bd.addPelicula(p);
-        guardarActores(p.getNombre(), p.getActores());
-        
         HashMap<String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
         
-        peliculasPorNombre.put(nombre, p);
+        String nombre = req.getParameter("nombrePelicula");
         
-        s.setAttribute("peliculas", peliculasPorNombre);
-        
-        res.sendRedirect(res.encodeRedirectURL("AdminCartelera.jsp"));
+        if (!peliculasPorNombre.containsKey(nombre)){
+            
+            String sinopsis = req.getParameter("sinopsisPelicula");
+            String paginaOficial = req.getParameter("paginaOficialPelicula");
+            String tituloOriginal = req.getParameter("tituloOriginalPelicula");
+            String genero = req.getParameter("generoPelicula");
+            String nacionalidad = req.getParameter("nacionalidadPelicula");
+            int duracion = Integer.parseInt(req.getParameter("duracionPelicula"));
+            int fecha = Integer.parseInt(req.getParameter("fechaPelicula"));
+            String distribuidora = req.getParameter("distribuidoraPelicula");
+            String director = req.getParameter("directorPelicula");
+            String clasificacion = req.getParameter("clasificacionPelicula");
+            Part portada = req.getPart("portadaPelicula");
+            String actores = req.getParameter("actoresPelicula");
+
+            Pelicula p = new Pelicula(nombre, sinopsis, paginaOficial, tituloOriginal, genero, 
+                    nacionalidad, duracion, fecha, distribuidora, director, clasificacion, 
+                    guardarImagen(portada, uploads), procesarActores(actores));
+
+            bd.addPelicula(p);
+            guardarActores(p.getNombre(), p.getActores());
+
+            peliculasPorNombre.put(nombre, p);
+
+            s.setAttribute("peliculas", peliculasPorNombre);
+
+            res.sendRedirect(res.encodeRedirectURL("AdminCartelera.jsp"));
+            
+        }else {
+            PrintWriter out = res.getWriter();
+            out.println("Ya hay una película con dicho nombre, pruebe otro.");
+        }
     }
     
     private String guardarImagen(Part part, File uploads){

@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 /**
@@ -22,6 +23,7 @@ import java.util.HashMap;
  */
 public class EliminarPelicula extends HttpServlet {
 private ModeloDatos bd;
+private String rutaArchivosEliminar = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\";
 
     public void init(ServletConfig cfg) throws ServletException
     {
@@ -33,42 +35,47 @@ private ModeloDatos bd;
        HttpSession s = req.getSession(true);
         
         String nombrePeliculaSeleccionada = req.getParameter("peliculaSeleccionada");
-        String rutaImagen = req.getParameter("imagen");
         
-        bd.removeActoresPorPelicula(nombrePeliculaSeleccionada);
-        bd.removeComentariosPorPelicula(nombrePeliculaSeleccionada);
-        bd.removeSesionesPorPelicula(nombrePeliculaSeleccionada);
-        bd.removePelicula(nombrePeliculaSeleccionada);
+        if (!bd.existeSesionParaPelicula(nombrePeliculaSeleccionada)){
+            
+            String rutaImagen = req.getParameter("imagen");
         
-        HashMap<String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
-        
-        peliculasPorNombre.remove(nombrePeliculaSeleccionada);
-        
-        s.setAttribute("peliculas", peliculasPorNombre);
-        
-        
-        
+            bd.removeActoresPorPelicula(nombrePeliculaSeleccionada);
+            bd.removeComentariosPorPelicula(nombrePeliculaSeleccionada);
+            bd.removePelicula(nombrePeliculaSeleccionada);
+
+            HashMap<String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
+
+            peliculasPorNombre.remove(nombrePeliculaSeleccionada);
+
+            s.setAttribute("peliculas", peliculasPorNombre);
+
+            eliminarImagen(rutaImagen);
+            
+        }else {
+            
+            PrintWriter out = res.getWriter();
+            out.println("Esta película tiene sesiones asociadas, no se puede eliminar.");
+            
+        }
+    }
+    
+    private void eliminarImagen(String rutaImagen){
         try{    
             rutaImagen = rutaImagen.replaceAll("/", "\\\\");
             
             System.out.println(rutaImagen);
             
-            //Poned la ruta de archivos donde tangais la carpeta donde se guardan las imagenes
-            String rutaAbsoluta = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\" + rutaImagen;
+            String rutaAbsoluta = rutaArchivosEliminar + rutaImagen;
             
             System.out.println(rutaAbsoluta);
             
             File file = new File(rutaAbsoluta);
             
             if (file.exists()){
-                if (file.delete()){
-                    System.out.println("Archivo eliminado correctamente");
-                }else{
-                    System.out.println("Archivo no eliminado.");
-                }
-            }else{
-                System.out.println("Archivo no existe.");
+                file.delete();
             }
+            
         } catch(Exception e){
             System.out.println(e);
         }
