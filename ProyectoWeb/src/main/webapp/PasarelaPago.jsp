@@ -27,7 +27,26 @@
     </style>
 </head>
 <body>
-
+    <%
+            if ( session.getAttribute("username") != null) {
+                String usuario = (String) session.getAttribute("username");
+                if(usuario.equals("admin"))
+                {
+                    response.sendRedirect("error.jsp");
+                }   
+            } 
+            else {
+                response.sendRedirect("error.jsp");
+            }
+        %>
+        <ul>
+              <li><a class="option" href="CargarCartelera">
+                <p>Cartelera</p>
+              </a></li>
+              <li><a class="option" href="cerrarSesion.jsp">
+                <p>Cerrar Sesión</p>
+              </a></li>
+            </ul>
     <table border="1">
         <tr>
             <th>Asientos Reservados (fila_columna)</th>

@@ -122,9 +122,10 @@ public class SesionesServlet extends HttpServlet {
             Date fecha = Date.valueOf(req.getParameter("sesionFecha"));
             Time hora = Time.valueOf(req.getParameter("sesionHora"));
             Sesion sesion = new Sesion(fecha, hora, sala, pelicula);
-            //MIRAR QUE LA SESION NO TENGA RESERVAS
-            bd.RemoveSesion(sesion);
-            Sala salaSesion = bd.getSalaNombre(sala);
+            if(!bd.sesionTieneReservas(sesion))
+            {
+                bd.RemoveSesion(sesion);
+                Sala salaSesion = bd.getSalaNombre(sala);
                 for (int i = 1; i <= salaSesion.getFilas(); i++)
                 {
                     for (int j = 1; j <= salaSesion.getColumnas(); j++)
@@ -133,19 +134,35 @@ public class SesionesServlet extends HttpServlet {
                         bd.RemoveEntrada(entrada);
                     }
                 }
+                res.getWriter().print("");
+            }
+            else 
+            {
+                PrintWriter out = res.getWriter();
+                out.println("No se puede eliminar la sesión porque tiene reservas.");
+            }
         }
         else if (req.getParameter("modo").equals("redirigirEditarSesion"))
         {
-            //TODO: MIRAR QUE NO TENGA RESERVAS
+            
             String pelicula = req.getParameter("nombrePelicula");
             String sala = req.getParameter("nombreSala"); 
             Date fecha = Date.valueOf(req.getParameter("sesionFecha"));
             Time hora = Time.valueOf(req.getParameter("sesionHora"));
             Sesion sesion = new Sesion(fecha, hora, sala, pelicula);
-            HttpSession session = req.getSession(false);
-            if (session != null)
+            if(!bd.sesionTieneReservas(sesion))
             {
-                session.setAttribute("sesionActual", sesion);
+                HttpSession session = req.getSession(false);
+                if (session != null)
+                {
+                    session.setAttribute("sesionActual", sesion);
+                }
+                res.getWriter().print("");
+            }
+            else 
+            {
+                PrintWriter out = res.getWriter();
+                out.println("No se puede editar la sesión porque tiene reservas.");
             }
         }
         else if (req.getParameter("modo").equals("editarSesion"))
@@ -250,7 +267,7 @@ public class SesionesServlet extends HttpServlet {
             else 
             {
                 PrintWriter out = res.getWriter();
-                out.println("No se puede añadir esta entrada porque ya existe una identica");
+                out.println("No se puede añadir esta entrada porque ya existe una identica. Dicha entrada puede encontrarse en una reserva.");
             }
         }
         else if (req.getParameter("modo").equals("redirigirEditarEntrada"))

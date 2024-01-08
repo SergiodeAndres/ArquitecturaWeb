@@ -9,13 +9,36 @@
 <% ModeloDatos modeloDatos = new ModeloDatos();
 modeloDatos.abrirConexion();%>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Administración de Sesiones</title>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <link rel="stylesheet" href="estilos.css">
     </head>
     <body>
+        <nav class="menu">
+            <ul>
+              <li><a class="option" href="AdminSalas.jsp">
+                <p>Administración de salas</p>
+              </a></li>
+              <li><a class="option" href="AdminCartelera.jsp">
+                <p>Administración de Películas</p>
+              </a></li>
+              <li><a class="option" href="VerReservas.jsp">
+                <p>Administración de reservas</p>
+              </a></li>
+              <li><a class="option" href="AdminEntradas.jsp">
+                <p>Administración de entradas y sesiones</p>
+              </a></li>
+              <li><a class="option" href="Informes.jsp">
+                <p>Informes</p>
+              </a></li>
+              <li><a class="option" href="cerrarSesion.jsp">
+                <p>Cerrar Sesión</p>
+              </a></li>
+            </ul>
+        </nav>
         <%
             if ( session.getAttribute("username") != null) {
                 String usuario = (String) session.getAttribute("username");
@@ -169,18 +192,25 @@ modeloDatos.abrirConexion();%>
                                     nombreSala: '<%=s.getNombreSala() %>', sesionHora: '<%=s.getHora().toString() %>',
                                     sesionFecha: '<%=s.getFecha().toString() %>'},
                                     success: function(response) {
-                                        var formData = 'modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
-                                        $.ajax({
-                                            url: 'SesionesServlet',
-                                            type: 'POST',
-                                            data: formData,
-                                            success: function(response) {
-                                                window.location.href = 'AdminEntradas.jsp';
-                                            },
-                                            error: function() {
-                                                alert('Error al procesar la solicitud');
-                                            }
-                                        });
+                                        if (response.trim() !== "")
+                                        {
+                                            alert(response);
+                                        }
+                                        else
+                                        {
+                                            var formData = 'modo=buscar&pelicula='+ $("#seleccionPelicula").val() + '&sala='+ $("#seleccionSala").val();
+                                            $.ajax({
+                                                url: 'SesionesServlet',
+                                                type: 'POST',
+                                                data: formData,
+                                                success: function(response) {
+                                                    window.location.href = 'AdminEntradas.jsp';
+                                                },
+                                                error: function() {
+                                                    alert('Error al procesar la solicitud');
+                                                }
+                                            });
+                                        }
                                     },
                                     error: function() {
                                         alert('Error al procesar la solicitud');
@@ -198,7 +228,14 @@ modeloDatos.abrirConexion();%>
                                 nombreSala: '<%=s.getNombreSala() %>', sesionHora: '<%=s.getHora().toString() %>',
                                 sesionFecha: '<%=s.getFecha().toString() %>'},
                                 success: function(response) {
-                                    window.location.href = 'EditarSesion.jsp';
+                                    if(response.trim() !== "")
+                                    {
+                                        alert(response);
+                                    }
+                                    else
+                                    {
+                                        window.location.href = 'EditarSesion.jsp';
+                                    }
                                 },
                                 error: function() {
                                     alert('Error al procesar la solicitud');

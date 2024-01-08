@@ -45,6 +45,9 @@
                   <li><a class="option" href="MainUsuario.jsp">
                     <p>Inicio</p>
                   </a></li>
+                  <li><a class="option" href="cerrarSesion.jsp">
+                    <p>Cerrar Sesión</p>
+                  </a></li>
                 </ul>
             </nav>
         

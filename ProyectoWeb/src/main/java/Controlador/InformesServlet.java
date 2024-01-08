@@ -39,7 +39,42 @@ public class InformesServlet extends HttpServlet {
             if (session != null)
             {
                 session.setAttribute("contenidoListaInforme", generos);
+                session.setAttribute("modobusqueda", "generos");
             }
+        }
+        else if (req.getParameter("modo").equals("buscarSalas"))
+        {
+            ArrayList<Sala> salas = bd.getSalas();
+            ArrayList<String> salasNombre = new ArrayList<String>(); 
+            for (Sala s : salas)
+            {
+                salasNombre.add(s.getNombre());
+            }
+            HttpSession session = req.getSession(false);
+            if (session != null)
+            {
+                session.setAttribute("contenidoListaInforme", salasNombre);
+                session.setAttribute("modobusqueda", "salas");
+            }
+        }
+        else if (req.getParameter("modo").equals("verInforme"))
+        {
+            System.out.println("HOLA2");
+            String contenidoBusqueda = req.getParameter("busqueda");
+            String tipoBusqueda = "";
+            HttpSession session = req.getSession(false);
+                if (session != null)
+                {
+                    tipoBusqueda = (String) session.getAttribute("modobusqueda");
+                    if (tipoBusqueda.equals("salas"))
+                    {
+                        session.setAttribute("peliculasInforme", bd.getPeliculasSala(contenidoBusqueda));
+                    }
+                    if (tipoBusqueda.equals("generos"))
+                    {
+                        session.setAttribute("peliculasInforme", bd.getPeliculasGenero(contenidoBusqueda));
+                    }
+                }
         }
     }
 

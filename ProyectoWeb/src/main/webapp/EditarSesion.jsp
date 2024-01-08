@@ -9,13 +9,36 @@
 <% ModeloDatos modeloDatos = new ModeloDatos();
 modeloDatos.abrirConexion();%>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <link rel="stylesheet" href="estilos.css">
     </head>
     <body>
+        <nav class="menu">
+            <ul>
+              <li><a class="option" href="AdminSalas.jsp">
+                <p>Administración de salas</p>
+              </a></li>
+              <li><a class="option" href="AdminCartelera.jsp">
+                <p>Administración de Películas</p>
+              </a></li>
+              <li><a class="option" href="VerReservas.jsp">
+                <p>Administración de reservas</p>
+              </a></li>
+              <li><a class="option" href="AdminEntradas.jsp">
+                <p>Administración de entradas y sesiones</p>
+              </a></li>
+              <li><a class="option" href="Informes.jsp">
+                <p>Informes</p>
+              </a></li>
+              <li><a class="option" href="cerrarSesion.jsp">
+                <p>Cerrar Sesión</p>
+              </a></li>
+            </ul>
+        </nav>
         <%
             if ( session.getAttribute("username") != null) {
                 String usuario = (String) session.getAttribute("username");

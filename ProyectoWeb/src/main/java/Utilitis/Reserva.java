@@ -82,5 +82,11 @@ public class Reserva {
     public void setNombrePelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
     }
+    
+    public void addEntrada(int fila, int columna)
+    {
+        Entrada entrada = new Entrada(fecha, hora, nombreSala, fila, columna, nombrePelicula);
+        entradas.add(entrada);
+    }
 
 }

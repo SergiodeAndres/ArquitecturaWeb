@@ -8,27 +8,55 @@
 <%@page import="java.util.HashMap" %>
 <%@page import="Utilitis.Pelicula" %>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link rel="stylesheet" href="estilos.css">
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+        <link rel="stylesheet" href="estilos.css">
     </head>
     <body>
         <header>EsCineElCine</header>
         <nav class="menu">
             <ul>
-              <li><a class="option" href="#">
-                <p>Inicio</p>
+              <li><a class="option" href="AdminSalas.jsp">
+                <p>Administración de salas</p>
+              </a></li>
+              <li><a class="option" href="AdminCartelera.jsp">
+                <p>Administración de Películas</p>
+              </a></li>
+              <li><a class="option" href="VerReservas.jsp">
+                <p>Administración de reservas</p>
+              </a></li>
+              <li><a class="option" href="AdminEntradas.jsp">
+                <p>Administración de entradas y sesiones</p>
+              </a></li>
+              <li><a class="option" href="Informes.jsp">
+                <p>Informes</p>
+              </a></li>
+              <li><a class="option" href="cerrarSesion.jsp">
+                <p>Cerrar Sesión</p>
               </a></li>
             </ul>
         </nav>
+        <%
+            if ( session.getAttribute("username") != null) {
+                String usuario = (String) session.getAttribute("username");
+                if(!usuario.equals("admin"))
+                {
+                    response.sendRedirect("error.jsp");
+                }   
+            } 
+            else {
+                response.sendRedirect("error.jsp");
+            }
+        %>
         
         <%HashMap<String, Pelicula> peliculas = (HashMap) session.getAttribute("peliculas");%>
         
         <div class="contenedor cartelera">
             <div class="titulo1">Cartelera</div>
-            <a class="option" href="InsertarPelicula.html">
+            <a class="option" href="InsertarPelicula.jsp">
                 <p>Añadir</p>
             </a>
             <div class="contenedor_espacio">

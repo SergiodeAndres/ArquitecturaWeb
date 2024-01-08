@@ -6,9 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="estilos.css">
         <title>JSP Page</title>
     </head>
     <body>
@@ -24,14 +25,27 @@
                 response.sendRedirect("error.jsp");
             }
         %>
-        <a href ="AdminSalas.jsp">Administración de salas </a>
-        <br>
-        <a href ="AdminCartelera.jsp">Administración de Películas </a>
-        <br>
-        <a href ="">Administración de reservas </a>
-        <br>
-        <a href ="AdminEntradas.jsp">Administración de entradas y sesiones </a>
-        <br>
-        <a href ="Informes.jsp">Informes </a>
+        <nav class="menu">
+            <ul>
+              <li><a class="option" href="AdminSalas.jsp">
+                <p>Administración de salas</p>
+              </a></li>
+              <li><a class="option" href="AdminCartelera.jsp">
+                <p>Administración de Películas</p>
+              </a></li>
+              <li><a class="option" href="VerReservas.jsp">
+                <p>Administración de reservas</p>
+              </a></li>
+              <li><a class="option" href="AdminEntradas.jsp">
+                <p>Administración de entradas y sesiones</p>
+              </a></li>
+              <li><a class="option" href="Informes.jsp">
+                <p>Informes</p>
+              </a></li>
+              <li><a class="option" href="cerrarSesion.jsp">
+                <p>Cerrar Sesión</p>
+              </a></li>
+            </ul>
+        </nav>
     </body>
 </html>

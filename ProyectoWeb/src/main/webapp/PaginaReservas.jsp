@@ -60,7 +60,26 @@
 
 </head>
     <body style="margin-top: 20px;">
-        
+        <%
+            if ( session.getAttribute("username") != null) {
+                String usuario = (String) session.getAttribute("username");
+                if(usuario.equals("admin"))
+                {
+                    response.sendRedirect("error.jsp");
+                }   
+            } 
+            else {
+                response.sendRedirect("error.jsp");
+            }
+        %>
+        <ul>
+              <li><a class="option" href="CargarCartelera">
+                <p>Cartelera</p>
+              </a></li>
+              <li><a class="option" href="cerrarSesion.jsp">
+                <p>Cerrar Sesión</p>
+              </a></li>
+            </ul>
         <div id="pantalla"></div>
         <%  %>
         <%-- Generar asientos dinámicamente (por ejemplo, 5 filas y 10 columnas) --%>

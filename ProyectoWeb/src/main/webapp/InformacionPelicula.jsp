@@ -16,12 +16,34 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     </head>
     <body>
+        <%String username = (String) session.getAttribute("username");%>
         <header>EsCineElCine</header>
         <nav class="menu">
             <ul>
               <li><a class="option" href="Cartelera.jsp">
-                <p>Volver</p>
+                <p>Cartelera</p>
               </a></li>
+              <% if (!(username == null)) {
+                        %>
+                        <li><a class="option" href="MainUsuario.jsp">
+                        <p>Inicio</p>
+                      </a></li>
+                      <li><a class="option" href="cerrarSesion.jsp">
+                        <p>Cerrar Sesión</p>
+                      </a></li>
+                  <%}
+                  else 
+                  {%>
+                    <li><a class="option" href="index.html">
+                        <p>Inicio</p>
+                      </a></li>
+                      <li><a class="option" href="IniciarSesion.html">
+                    <p>Iniciar sesión</p>
+                    </a></li>
+                    <li><a class="option" href="Registrarse.html">
+                      <p>Registrarse</p>
+                    </a></li>
+                  <%}%>
             </ul>
         </nav>
         
@@ -50,8 +72,6 @@
                 </div>
             </div>
         </div>
-        
-        <%String username = (String) session.getAttribute("username");%>
                 
         <%if (!(username == null)){%>
                 

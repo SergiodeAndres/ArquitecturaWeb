@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>¡Vaya! Parece que has intentado acceder a una página que requiere sesión, sin tener sesión activa</h1>
+        <h1>¡Vaya! Parece que has intentado acceder a una página que requiere sesión, sin tener sesión activa.
+        O has intentado acceder a una página prohibida para tu tipo de sesión.</h1>
     </body>
 </html>

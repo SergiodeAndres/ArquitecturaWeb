@@ -383,23 +383,17 @@ public class ModeloDatos {
     
     public ArrayList<Sesion> getSesiones(String nombrePelicula){
         ArrayList<Sesion> sesiones = new ArrayList<>();
-        Date fecha;
-        Time hora;
-        String nombreSala;
-        String nombrePeli;
-        
         try {
             Statement set = conexion.createStatement();
             ResultSet rs = set.executeQuery("SELECT * FROM SESION WHERE NOMBREPELICULA = " + "'" + nombrePelicula + "'");
             while (rs.next()) {
-                fecha = rs.getDate(1);
-                hora = rs.getTime(2);
-                nombreSala = rs.getString(3);
-                nombrePeli = rs.getString(4);
-                
-                Sesion sesion = new Sesion(fecha, hora, nombreSala, nombrePeli);
-                
-                sesiones.add(sesion);
+                if(LocalDateTime.now().isBefore(LocalDateTime.of(
+                        rs.getDate(1).toLocalDate(), rs.getTime(2).toLocalTime())))
+                {
+                    Sesion s = new Sesion(rs.getDate(1), rs.getTime(2), 
+                        rs.getString(3), rs.getString(4));
+                    sesiones.add(s);
+                }
             }
             rs.close();
             set.close();
@@ -407,7 +401,17 @@ public class ModeloDatos {
             System.out.println("No coge de la tabla");
             System.out.println(e);
         }
-        
+        Collections.sort(sesiones, new Comparator<Sesion>() {
+            @Override
+            public int compare(Sesion s1, Sesion s2) {
+                int fechaComparacion = s1.getFecha().compareTo(s2.getFecha());
+                if (fechaComparacion != 0) {
+                    return fechaComparacion;
+                } else {
+                    return s1.getHora().compareTo(s2.getHora());
+                }
+            }
+        });
         return sesiones;
     }
     
@@ -793,10 +797,25 @@ public class ModeloDatos {
     
     public boolean ExisteEntrada (Entrada entrada)
     {
-        //TODO: MIRAR QUE NO ESTE EN UNA RESERVA
         boolean veredicto = false; 
         ArrayList<Entrada> entradas = getEntradasSesion(entrada.getNombrePelicula(), entrada.getNombreSala(), 
-                entrada.getFecha().toString(), entrada.getHora().toString()); 
+                entrada.getFecha().toString(), entrada.getHora().toString());
+        String query = "SELECT * FROM RESERVA INNER JOIN RESERVATIENEASIENTOS ON RESERVA.REFERENCIA = RESERVATIENEASIENTOS.REFERENCIA";
+        try {
+            PreparedStatement queryCompleta = conexion.prepareStatement(query);
+            ResultSet rs = queryCompleta.executeQuery();
+            while (rs.next())
+            {
+                entradas.add(new Entrada(rs.getDate(2), rs.getTime(3), rs.getString(4),
+                rs.getInt(7), rs.getInt(8), rs.getString(1)));
+            }
+            rs.close(); 
+        } 
+        catch (SQLException ex) {
+            System.out.println("No ha añadido la sesión");
+            System.out.println(ex.toString());
+            
+        } 
         for (Entrada e: entradas)
         {
             if (e.getColumna() == entrada.getColumna() && e.getFila() == entrada.getFila())
@@ -952,6 +971,89 @@ public class ModeloDatos {
         }catch (SQLException ex){
             System.out.println(ex.toString());
         }
+    }
+    
+    public boolean sesionTieneReservas(Sesion sesion)
+    {
+        boolean veredicto = false; 
+        try {
+            statement = conexion.createStatement();
+            setResultado = statement.executeQuery("SELECT * FROM RESERVA");
+            while (setResultado.next()){   
+                if (sesion.getFecha().equals(setResultado.getDate(2)) && 
+                        sesion.getHora().equals(setResultado.getTime(3)) &&
+                        sesion.getNombrePelicula().equals(setResultado.getString(1)) &&
+                        sesion.getNombreSala().equals(setResultado.getString(4)))
+                {
+                    veredicto = true;
+                }
+            }
+        }catch (SQLException ex){
+            System.out.println(ex.toString());
+        }
+        return veredicto;
+    }
+    
+    public ArrayList<Reserva> getReservas ()
+    {
+        ArrayList<Reserva> reservas = new ArrayList<Reserva>();
+        try {
+            statement = conexion.createStatement();
+            setResultado = statement.executeQuery("SELECT * FROM RESERVA");
+            while (setResultado.next()){   
+                String pelicula = setResultado.getString(1);
+                Date fecha = setResultado.getDate(2);
+                Time hora = setResultado.getTime(3);
+                String sala = setResultado.getString(4);
+                String referencia = setResultado.getString(5);
+                Reserva reserva = new Reserva(pelicula, fecha, hora, sala, referencia, new ArrayList<Entrada>());
+                reservas.add(reserva);
+            }
+            setResultado.close();
+            for (Reserva r: reservas)
+            {
+                setResultado = statement.executeQuery("SELECT * FROM RESERVATIENEASIENTOS WHERE REFERENCIA ='" +r.getReferencia()+ "'");
+                while (setResultado.next()){   
+                    r.addEntrada(setResultado.getInt(2), setResultado.getInt(3));
+                }
+                setResultado.close();
+            }
+        }catch (SQLException ex){
+            System.out.println(ex.toString());
+        }
+        return reservas;
+    }
+    
+    public ArrayList<String> getPeliculasSala (String sala)
+    {
+        ArrayList<String> peliculas = new ArrayList<String>();
+        try {
+            statement = conexion.createStatement();
+            setResultado = statement.executeQuery("SELECT DISTINCT NOMBREPELICULA FROM SESION WHERE NOMBRESALA ='" +sala+ "'");
+            while (setResultado.next()){   
+                peliculas.add(setResultado.getString(1));
+            }
+            setResultado.close();
+        }catch (SQLException ex){
+            System.out.println(ex.toString());
+        }
+        return peliculas;
+    }
+    
+    public ArrayList<String> getPeliculasGenero (String genero)
+    {
+        ArrayList<String> peliculas = new ArrayList<String>();
+        try {
+            statement = conexion.createStatement();
+            setResultado = statement.executeQuery("SELECT DISTINCT NOMBRE FROM PELICULA WHERE GENERO ='" +genero+ "'");
+            while (setResultado.next()){   
+                peliculas.add(setResultado.getString(1));
+            }
+            setResultado.close();
+        }catch (SQLException ex){
+            System.out.println(ex.toString());
+        }
+        return peliculas;
     }
 
     public void cerrarConexion() {
