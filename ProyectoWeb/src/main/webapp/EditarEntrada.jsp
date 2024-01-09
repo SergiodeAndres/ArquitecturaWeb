@@ -120,7 +120,7 @@ modeloDatos.abrirConexion();%>
         <h2>Elegir Fecha: </h2>
         <form id="formulario" action="SesionesServlet" method="post">
             <input type="datetime-local" id= "nuevaSesion" name="fechaHora" required><br>
-            <input type="submit" value="Añadir sesión">
+            <input type="submit" value="Editar Entrada">
         </form>
         
         <script>

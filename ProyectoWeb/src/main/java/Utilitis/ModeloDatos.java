@@ -354,8 +354,6 @@ public class ModeloDatos {
             queryCompleta.setInt(3, sala.getColumnas());
             queryCompleta.setString(4, nombreAntiguo);
             queryCompleta.executeUpdate();
-            //HABRA QUE TENER EN CUENTA SI EN OTRAS TABLAS APARECE EL NOMBRE DE LA SALA Y CAMBIARLO TAMBIEN
-            //FUERZA BRUTA SEGURAMENTE
         } 
         catch (SQLException ex) {
             System.out.println("No ha cambiado la sala");
@@ -818,7 +816,12 @@ public class ModeloDatos {
         } 
         for (Entrada e: entradas)
         {
-            if (e.getColumna() == entrada.getColumna() && e.getFila() == entrada.getFila())
+            if (e.getColumna() == entrada.getColumna() 
+                    && e.getFila() == entrada.getFila()
+                    && e.getFecha().equals(entrada.getFecha())
+                    && e.getHora().equals(entrada.getHora())
+                    && e.getNombrePelicula().equals(entrada.getNombrePelicula())
+                    && e.getNombreSala().equals(entrada.getNombreSala()))
             {
                 veredicto = true;
             }

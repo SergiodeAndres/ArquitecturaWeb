@@ -47,12 +47,12 @@ public class ModificarPelicula extends HttpServlet {
     }
     
     public void service(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        HttpSession s = req.getSession(true);
+        HttpSession s = req.getSession(false);
         
         Pelicula peliculaSeleccionada = (Pelicula) s.getAttribute("datos_pelicula_seleccionada");
         HashMap <String, Pelicula> peliculasPorNombre = (HashMap) s.getAttribute("peliculas");
 
-        String nombre = req.getParameter("nombrePelicula");
+        String nombre = peliculaSeleccionada.getNombre();
             
         System.out.println(peliculasPorNombre.keySet().toString());
             
@@ -60,9 +60,7 @@ public class ModificarPelicula extends HttpServlet {
             
         System.out.println(peliculasPorNombre.containsKey(nombre));
 
-        if (!peliculasPorNombre.containsKey(nombre)){
-
-            if (!bd.existeSesionParaPelicula(peliculaSeleccionada.getNombre())){
+        if (!bd.existeSesionParaPelicula(peliculaSeleccionada.getNombre())){
 
                 String sinopsis = req.getParameter("sinopsisPelicula");
                 String paginaOficial = req.getParameter("paginaOficialPelicula");
@@ -99,19 +97,13 @@ public class ModificarPelicula extends HttpServlet {
                 peliculasPorNombre.put(nombre, p);
 
                 s.setAttribute("peliculas", peliculasPorNombre);
+                res.getWriter().print("");
 
                 } else{
                     PrintWriter out = res.getWriter();
                     out.println("Esta película tiene sesiones asociadas, no se puede modificar.");
                 }
 
-            } else {
-                PrintWriter out = res.getWriter();
-                out.println("Ya hay una película con dicho nombre, pruebe otro.");
-            }
-        
-
-        res.sendRedirect(res.encodeRedirectURL("AdminCartelera.jsp"));
     }
     
     private String modificarImagen(Part part, String rutaImagen){

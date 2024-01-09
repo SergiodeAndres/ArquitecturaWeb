@@ -51,6 +51,7 @@ private String rutaArchivosEliminar = "C:\\Users\\paser\\OneDrive\\Documentos\\N
             s.setAttribute("peliculas", peliculasPorNombre);
 
             eliminarImagen(rutaImagen);
+            res.getWriter().print("");
             
         }else {
             

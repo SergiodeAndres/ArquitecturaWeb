@@ -11,6 +11,7 @@
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <link rel="stylesheet" href="estilos.css">
     </head>
     <body>
@@ -74,7 +75,6 @@
                     <h2>Datos de la película</h2>
                     <form id="FormularioPelicula" action="ModificarPelicula" method="post" enctype="multipart/form-data" >
                         <label for="nombrePelicula">Nombre de la película:</label>
-                        <input type="text" id="nombrePelicula" name="nombrePelicula" value="<%=peliculaSeleccionada.getNombre()%>" required>
                         <p>Título: <%=peliculaSeleccionada.getNombre()%>.</p>
                         <label for="sinopsisPelicula">Sinopsis de la película:</label><br>
                         <textarea id="sinopsisPelicula" name="sinopsisPelicula" rows="5" cols="40" required><%=peliculaSeleccionada.getSinopsis()%></textarea><br>
@@ -114,6 +114,34 @@
 
                         <button type="submit">Modificar película</button>
                     </form>
+                        <script>
+                        $(document).ready(function() {
+                                    $('#FormularioPelicula').submit(function(event) {
+                                        event.preventDefault();
+                                        var formData = new FormData($('#FormularioPelicula')[0]);
+                                        $.ajax({
+                                            url: 'ModificarPelicula',
+                                            type: 'POST',
+                                            data: formData,
+                                            processData: false,
+                                            contentType: false,
+                                            success: function(response) {
+                                                if (response.trim() !== "")
+                                                {
+                                                    alert(response);
+                                                }
+                                                else
+                                                {
+                                                    window.location.href = 'AdminCartelera.jsp';
+                                                }
+                                            },
+                                            error: function() {
+                                                alert('Error al procesar la solicitud');
+                                            }
+                                        });
+                                    });
+                                });
+                        </script>
                 </div>
             </div>
         </div>

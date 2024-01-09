@@ -7,11 +7,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="java.util.HashMap" %>
 <%@page import="Utilitis.Pelicula" %>
+<%@page import="Utilitis.ModeloDatos" %>
+<% ModeloDatos modeloDatos = new ModeloDatos();
+modeloDatos.abrirConexion();%>
 <!DOCTYPE html>
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" href="estilos.css">
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
         <link rel="stylesheet" href="estilos.css">
     </head>
@@ -52,7 +54,9 @@
             }
         %>
         
-        <%HashMap<String, Pelicula> peliculas = (HashMap) session.getAttribute("peliculas");%>
+        <%HashMap<String, Pelicula> peliculas = (HashMap) modeloDatos.getPeliculas();
+            session.setAttribute("peliculas", peliculas);
+        %>
         
         <div class="contenedor cartelera">
             <div class="titulo1">Cartelera</div>
@@ -75,7 +79,14 @@
                                             type: 'POST',
                                             data: { peliculaSeleccionada: '<%=p.getNombre()%>'},
                                             success: function(response) {
-                                                window.location.href = 'ModificarPelicula.jsp';
+                                                if (response.trim() !== "")
+                                                {
+                                                    alert(response);
+                                                }
+                                                else
+                                                {
+                                                    window.location.href = 'ModificarPelicula.jsp';
+                                                }
                                             },
                                             error: function() {
                                                 alert('Error al procesar la solicitud');
@@ -93,7 +104,14 @@
                                             type: 'POST',
                                             data: { peliculaSeleccionada: '<%=p.getNombre()%>', imagen: '<%=p.getImagen()%>'},
                                             success: function(response) {
-                                                window.location.href = 'AdminCartelera.jsp';
+                                                if (response.trim() !== "")
+                                                {
+                                                    alert(response);
+                                                }
+                                                else
+                                                {
+                                                    window.location.href = 'AdminCartelera.jsp';
+                                                }
                                             },
                                             error: function() {
                                                 alert('Error al procesar la solicitud');
