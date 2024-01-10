@@ -12,7 +12,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     </head>
     <body>
-        <header>EsCineElCine</header>
         <%
             if ( session.getAttribute("username") != null) {
                 String usuario = (String) session.getAttribute("username");
@@ -25,16 +24,19 @@
                 response.sendRedirect("error.jsp");
             }
         %>
-        <h1>Usuario: <%=(String) session.getAttribute("username")%></h1>
-        <nav class="menu">
-            <ul>
-              <li><a class="option" href="CargarCartelera">
-                <p>Cartelera</p>
-              </a></li>
-              <li><a class="option" href="cerrarSesion.jsp">
-                <p>Cerrar Sesión</p>
-              </a></li>
-            </ul>
-        </nav>
+        <div class="contenedor_cabecera">
+            <header>EsCineElCine</header>
+            <h1>Usuario: <%=(String) session.getAttribute("username")%></h1>
+            <nav class="menu">
+                <ul>
+                    <li><a class="option" href="Cartelera.jsp">
+                            <p>Cartelera</p>
+                        </a></li>
+                    <li><a class="option" href="cerrarSesion.jsp">
+                            <p>Cerrar Sesión</p>
+                        </a></li>
+                </ul>
+            </nav>
+        </div>
     </body>
 </html>

@@ -17,28 +17,32 @@ modeloDatos.abrirConexion();%>
         <link rel="stylesheet" href="estilos.css">
     </head>
     <body>
-        <nav class="menu">
-            <ul>
-              <li><a class="option" href="AdminSalas.jsp">
-                <p>Administración de salas</p>
-              </a></li>
-              <li><a class="option" href="AdminCartelera.jsp">
-                <p>Administración de Películas</p>
-              </a></li>
-              <li><a class="option" href="VerReservas.jsp">
-                <p>Administración de reservas</p>
-              </a></li>
-              <li><a class="option" href="AdminEntradas.jsp">
-                <p>Administración de entradas y sesiones</p>
-              </a></li>
-              <li><a class="option" href="Informes.jsp">
-                <p>Informes</p>
-              </a></li>
-              <li><a class="option" href="cerrarSesion.jsp">
-                <p>Cerrar Sesión</p>
-              </a></li>
-            </ul>
-        </nav>
+        <div class="contenedor_cabecera">
+            <header>EsCineElCine</header>
+            <h1>Usuario: Administrador</h1>
+            <nav class="menu">
+                <ul>
+                    <li><a class="option2" href="AdminSalas.jsp">
+                            <p>Salas</p>
+                        </a></li>
+                    <li><a class="option2" href="AdminCartelera.jsp">
+                            <p>Películas</p>
+                        </a></li>
+                    <li><a class="option2" href="VerReservas.jsp">
+                            <p>Reservas</p>
+                        </a></li>
+                    <li><a class="option2" href="AdminEntradas.jsp">
+                            <p>Entradas y sesiones</p>
+                        </a></li>
+                    <li><a class="option2" href="Informes.jsp">
+                            <p>Informes</p>
+                        </a></li>
+                    <li><a class="option2" href="cerrarSesion.jsp">
+                            <p>Cerrar Sesión</p>
+                        </a></li>
+                </ul>
+            </nav>
+        </div>
         <%
             if ( session.getAttribute("username") != null) {
                 String usuario = (String) session.getAttribute("username");
@@ -51,67 +55,68 @@ modeloDatos.abrirConexion();%>
                 response.sendRedirect("error.jsp");
             }
         %>
-        <h2>Ver Películas por (Categoría): </h2> 
-        <button id="Genero">Género</button>
-        <button id="Sala">Sala</button>
-        <script>
-            $(document).ready(function() {
-                $('#Genero').click(function() {
-                    var formData = 'modo=buscarGeneros';
-                    $.ajax({
-                        url: 'InformesServlet',
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            window.location.href = 'Informes.jsp';
-                        },
-                        error: function() {
-                            alert('Error al procesar la solicitud');
+        <div class="contenedor_cuerpo2">
+            <h2>Ver Películas por (Categoría): </h2> 
+            <button id="Genero">Género</button>
+            <button id="Sala">Sala</button>
+            <script>
+                $(document).ready(function () {
+                    $('#Genero').click(function () {
+                        var formData = 'modo=buscarGeneros';
+                        $.ajax({
+                            url: 'InformesServlet',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                window.location.href = 'Informes.jsp';
+                            },
+                            error: function () {
+                                alert('Error al procesar la solicitud');
                             }
                         });
                     });
-                $('#Sala').click(function() {
-                    var formData = 'modo=buscarSalas';
-                    $.ajax({
-                        url: 'InformesServlet',
-                        type: 'POST',
-                        data: formData,
-                        success: function(response) {
-                            window.location.href = 'Informes.jsp';
-                        },
-                        error: function() {
-                            alert('Error al procesar la solicitud');
+                    $('#Sala').click(function () {
+                        var formData = 'modo=buscarSalas';
+                        $.ajax({
+                            url: 'InformesServlet',
+                            type: 'POST',
+                            data: formData,
+                            success: function (response) {
+                                window.location.href = 'Informes.jsp';
+                            },
+                            error: function () {
+                                alert('Error al procesar la solicitud');
                             }
                         });
                     });
                 });
-        </script>
+            </script>
             <%
             if (session.getAttribute("contenidoListaInforme") != null)
             {
                 ArrayList<String> contenidos = (ArrayList<String>) session.getAttribute("contenidoListaInforme");
             %>
             <select id="seleccionInforme">
-            <% 
-                for(String s: contenidos) {
-            %>
+                <% 
+                    for(String s: contenidos) {
+                %>
                 <option value="<%=s%>"> <%=s%> </option>
-            <%
-                }
-            %>
+                <%
+                    }
+                %>
             </select>
             <button id="BotonBuscar">Ver Películas</button>
             <script>
-                $(document).ready(function() {
-                    $('#BotonBuscar').click(function() {
+                $(document).ready(function () {
+                    $('#BotonBuscar').click(function () {
                         $.ajax({
                             url: 'InformesServlet',
                             type: 'POST',
-                            data: { modo: 'verInforme', busqueda: $("#seleccionInforme").val()},
-                            success: function(response) {
+                            data: {modo: 'verInforme', busqueda: $("#seleccionInforme").val()},
+                            success: function (response) {
                                 window.location.href = 'Informes.jsp';
                             },
-                            error: function() {
+                            error: function () {
                                 alert('Error al procesar la solicitud');
                             }
                         });
@@ -127,12 +132,13 @@ modeloDatos.abrirConexion();%>
                 {
                     ArrayList<String> peliculas = (ArrayList<String>) session.getAttribute("peliculasInforme");
                     for (String p: peliculas) {%>
-                        <%= p %>
-                        <br>
-                    <%}
-                %>
-                
-                <%}
+            <%= p %>
+            <br>
+            <%}
             %>
+
+            <%}
+            %>
+        </div>
     </body>
 </html>

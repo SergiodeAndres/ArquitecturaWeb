@@ -1,44 +1,96 @@
 :root {
     --rojo: #2e2e2e;
+    --fondo1: #12122b;
+    --fondo2: #383845;
+    --fondo3: #5e5e5e;
+    --fondo4: #848478;
+    --fondo5: #aaaa91;
+    --letra: #64748b;
 }
+
+html{
+    height: 100%;
+    background-color: var(--fondo1);
+    color: var(--letra);
+}
+
+h1{
+    color: var(--letra);
+}
+
 header{
-    font-size: 75px;
-    text-align: center;
+    font-size: 50px;
+    margin: 10px;
+    color: #64748b;
 }
 
 ul li{
     display: inline-block;
-    background-color: var(--rojo);
-    margin-left: 120px;
-    margin-right: 120px;
-    border-width: 4px;
-    border-style: solid;
-    border-color: darkred;
+}
+
+p{
+    color: var(--letra)
+}
+
+.contenedor_cabecera{
+    background-color: var(--fondo2);
+    padding: 10px;
+    border-radius: 10px;
 }
 
 .option{
     display: inline-block;
-    background-color: var(--rojo);
-    color: rgb(204, 0, 0);
-    font-weight: 700;
+    background-color: var(--fondo5);
+    color: var(--letra);
+    font-weight: 400;
     text-transform: uppercase;
-    width: 150px;
-    height: 50px;
+    width: 180px;
+    height: 30px;
     text-align: center;
+    padding-bottom: 15px;
     text-decoration: none;
+    border-radius: 10px;
 }
 
-.optionbutton{
-    width: 150px;
-    height: 50px;
-    cursor: pointer;
-    background-color: #2e2e2e;
-    color: rgb(204, 0, 0);
-    font-weight: 700;
+.option2{
+    display: inline-block;
+    background-color: var(--fondo5);
+    color: var(--letra);
+    font-weight: 200;
     text-transform: uppercase;
-    border-width: 0.5px;
-    border-style: solid;
-    border-color: darkred;
+    width: 200px;
+    height: 30px;
+    text-align: center;
+    padding-bottom: 15px;
+    text-decoration: none;
+    border-radius: 10px;
+}
+
+.contenedor_cuerpo1{
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 20px;
+}
+
+.contenedor_cuerpo2{
+    margin: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: var(--fondo2);
+    color: var(--letra);
+}
+
+.contenedor_pantalla{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100vh;
+    margin: 0;
+    margin: 20px 0 0;
 }
 
 .contenedor{
@@ -46,45 +98,46 @@ ul li{
 }
 
 .cartelera{
+    margin-top: 10px;
+    margin-bottom: 10px;
     margin-left: 15%;
     margin-right: 15%;
+    padding: 10px;
+    background-color: var(--fondo3);
+    border-radius: 10px;
 }
 
 .informacionPelicula{
     margin-left: 24%;
     margin-right: 24%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    background-color: var(--fondo2);
 }
 
 .titulo1{
     font-size: 50px;
     text-align: center;
-    border: 5px;
-    border-style: solid;
-    border-color: burlywood;
+    color: var(--letra);
 }
 
 .titulo2{
     font-size: 20px;
     text-align: center;
-    border: 2px;
-    border-style: solid;
-    border-color: burlywood;
-    background-color: aliceblue;
+    color: var(--letra);
 }
 
 .titulo3{
     font-size: 20px;
     border: 2px;
-    border-style: solid;
-    border-color: burlywood;
-    background-color: aliceblue;
+    color: var(--letra);
 }
 
 .contenedor_espacio{
     display: grid;
-    grid-template-columns: repeat(4, 1fr); 
+    grid-template-columns: repeat(4, 1fr);
     grid-gap: 20px;
-    background-color: antiquewhite;
 }
 
 .contenedorH{
@@ -185,17 +238,16 @@ img{
     text-transform: uppercase;
     border-width: 0.5px;
     border-style: solid;
-    border-color: darkred;   
+    border-color: darkred;
 }
 
 .formulariobutton{
-    font-size: 20px;
+    background-color: var(--fondo3);
+    color: #64748b;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
     cursor: pointer;
-    background-color: #2e2e2e;
-    color: rgb(204, 0, 0);
-    border-width: 4px;
-    border-style: solid;
-    border-color: darkred;
 }
 
 .reservabutton{
@@ -220,4 +272,77 @@ img{
 
 .comentario_pelicula{
     margin-bottom: 50px;
+}
+
+.contenedor_formulario1{
+    background-color: var(--fondo2);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 300px;
+    max-width: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.contenedor_formulario2{
+    background-color: var(--fondo2);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 600px;
+    max-width: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    box-sizing: border-box;
+}
+
+button {
+    background-color: var(--fondo3);
+    color: #64748b;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: var(--fondo5);
+}
+
+#pantalla {
+    width: 20%;
+    height: 20px;
+    margin-bottom: 20px;
+    background-color: var(--fondo5);
+    text-align: center;
+}
+
+.fila {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+.asiento {
+    width: 20px;
+    height: 20px;
+    background-color: #00ff00;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.asiento.reservado {
+    background-color: #0000ff;
+}
+.asientonodisponible{
+    width: 20px;
+    height: 20px;
+    background-color: #00ff00;
+    margin-right: 5px;
+    background-color: #ff0000;
 }

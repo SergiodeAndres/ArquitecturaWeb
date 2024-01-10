@@ -17,28 +17,32 @@ modeloDatos.abrirConexion();%>
         <title>JSP Page</title>
     </head>
     <body>
-        <nav class="menu">
-            <ul>
-              <li><a class="option" href="AdminSalas.jsp">
-                <p>Administración de salas</p>
-              </a></li>
-              <li><a class="option" href="AdminCartelera.jsp">
-                <p>Administración de Películas</p>
-              </a></li>
-              <li><a class="option" href="VerReservas.jsp">
-                <p>Administración de reservas</p>
-              </a></li>
-              <li><a class="option" href="AdminEntradas.jsp">
-                <p>Administración de entradas y sesiones</p>
-              </a></li>
-              <li><a class="option" href="Informes.jsp">
-                <p>Informes</p>
-              </a></li>
-              <li><a class="option" href="cerrarSesion.jsp">
-                <p>Cerrar Sesión</p>
-              </a></li>
-            </ul>
-        </nav>
+        <div class="contenedor_cabecera">
+            <header>¡Bienvenido al EsCineElCine!</header>
+            <nav class="menu">
+                <ul>
+                    <li><a class="option" href="AdminSalas.jsp">
+                            <p>Salas</p>
+                        </a></li>
+                    <li><a class="option" href="AdminCartelera.jsp">
+                            <p>Películas</p>
+                        </a></li>
+                    <li><a class="option" href="VerReservas.jsp">
+                            <p>Reservas</p>
+                        </a></li>
+                    <li><a class="option" href="AdminEntradas.jsp">
+                            <p>Entradas y sesiones</p>
+                        </a></li>
+                    <li><a class="option" href="Informes.jsp">
+                            <p>Informes</p>
+                        </a></li>
+                    <li><a class="option" href="cerrarSesion.jsp">
+                            <p>Cerrar Sesión</p>
+                        </a></li>
+                </ul>
+            </nav>
+        </div>
+
         <%
             if ( session.getAttribute("username") != null) {
                 String usuario = (String) session.getAttribute("username");
@@ -52,38 +56,41 @@ modeloDatos.abrirConexion();%>
             }
             ArrayList<Reserva> reservas = modeloDatos.getReservas();
         %>
-        <table>
-            <!-- Encabezados -->
-            <tr>
-                <th>Referencia</th>
-                <th>Película</th>
-                <th>Sala</th>
-                <th>Fecha</th>
-                <th>Hora</th>
-                <th>Asientos</th>
-            </tr>
-            <!<!-- Filas -->
-        <% 
-            for (Reserva r : reservas) {
-        %>
-            <tr>
-                <td><%= r.getReferencia() %></td>
-                <td><%= r.getNombrePelicula() %></td>
-                <td><%= r.getNombreSala() %></td>
-                <td><%= r.getFecha().toString() %></td>
-                <td><%= r.getHora().toString() %></td>
-                <td>
-                    <%
-                        ArrayList<Entrada> entradas = r.getEntradas();
-                        for (Entrada e : entradas) {%>
+        <div class="contenedor_cuerpo2">
+            <table>
+                <!-- Encabezados -->
+                <tr>
+                    <th>Referencia</th>
+                    <th>Película</th>
+                    <th>Sala</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Asientos</th>
+                </tr>
+                <!<!-- Filas -->
+                <% 
+                    for (Reserva r : reservas) {
+                %>
+                <tr>
+                    <td><%= r.getReferencia() %></td>
+                    <td><%= r.getNombrePelicula() %></td>
+                    <td><%= r.getNombreSala() %></td>
+                    <td><%= r.getFecha().toString() %></td>
+                    <td><%= r.getHora().toString() %></td>
+                    <td>
+                        <%
+                            ArrayList<Entrada> entradas = r.getEntradas();
+                            for (Entrada e : entradas) {%>
                         F<%=e.getFila()%>C<%=e.getColumna()%>
                         <%}
-                     %>
-                </td>
-            </tr>
-        <%
-            }
-        %>
-        </table>
+                        %>
+                    </td>
+                </tr>
+                <%
+                    }
+                %>
+            </table>
+        </div>
     </body>
 </html>
+<%modeloDatos.cerrarConexion();%>

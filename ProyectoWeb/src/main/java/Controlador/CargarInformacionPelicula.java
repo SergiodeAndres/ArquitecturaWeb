@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controlador;
 
 import Utilitis.ModeloDatos;
@@ -17,10 +13,6 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/**
- *
- * @author paser
- */
 public class CargarInformacionPelicula extends HttpServlet {
     
     private ModeloDatos bd;

@@ -1,12 +1,10 @@
 package Utilitis;
+
 import java.sql.Date;
 import java.sql.Time;
-/**
- *
- * @author sergi
- */
+
 public class Entrada {
-    
+
     private Date fecha;
     private Time hora;
     private String nombreSala;
@@ -41,7 +39,6 @@ public class Entrada {
         this.nombrePelicula = nombrePelicula;
     }
 
-
     /**
      * Get the value of columna
      *
@@ -59,7 +56,6 @@ public class Entrada {
     public void setColumna(int columna) {
         this.columna = columna;
     }
-
 
     /**
      * Get the value of fila
@@ -79,7 +75,6 @@ public class Entrada {
         this.fila = fila;
     }
 
-
     /**
      * Get the value of nombreSala
      *
@@ -98,7 +93,6 @@ public class Entrada {
         this.nombreSala = nombreSala;
     }
 
-
     /**
      * Get the value of hora
      *
@@ -116,7 +110,6 @@ public class Entrada {
     public void setHora(Time hora) {
         this.hora = hora;
     }
-
 
     /**
      * Get the value of fecha

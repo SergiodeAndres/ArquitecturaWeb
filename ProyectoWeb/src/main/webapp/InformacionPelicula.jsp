@@ -17,38 +17,44 @@
     </head>
     <body>
         <%String username = (String) session.getAttribute("username");%>
-        <header>EsCineElCine</header>
-        <nav class="menu">
-            <ul>
-              <li><a class="option" href="Cartelera.jsp">
-                <p>Cartelera</p>
-              </a></li>
-              <% if (!(username == null)) {
+        <div class="contenedor_cabecera">
+            <header>EsCineElCine</header>
+                <% if (!(username == null)) {
+                %>
+            <h1>Usuario: <%=(String) session.getAttribute("username")%></h1>
+            <%}%>
+            <nav class="menu">
+                <ul>
+                    <li><a class="option" href="Cartelera.jsp">
+                            <p>Cartelera</p>
+                        </a></li>
+                        <% if (!(username == null)) {
                         %>
-                        <li><a class="option" href="MainUsuario.jsp">
-                        <p>Inicio</p>
-                      </a></li>
-                      <li><a class="option" href="cerrarSesion.jsp">
-                        <p>Cerrar Sesión</p>
-                      </a></li>
-                  <%}
-                  else 
-                  {%>
+                    <li><a class="option" href="MainUsuario.jsp">
+                            <p>Inicio</p>
+                        </a></li>
+                    <li><a class="option" href="cerrarSesion.jsp">
+                            <p>Cerrar Sesión</p>
+                        </a></li>
+                        <%}
+                        else 
+                        {%>
                     <li><a class="option" href="index.html">
-                        <p>Inicio</p>
-                      </a></li>
-                      <li><a class="option" href="IniciarSesion.html">
-                    <p>Iniciar sesión</p>
-                    </a></li>
+                            <p>Inicio</p>
+                        </a></li>
+                    <li><a class="option" href="IniciarSesion.html">
+                            <p>Iniciar sesión</p>
+                        </a></li>
                     <li><a class="option" href="Registrarse.html">
-                      <p>Registrarse</p>
-                    </a></li>
-                  <%}%>
-            </ul>
-        </nav>
-        
+                            <p>Registrarse</p>
+                        </a></li>
+                        <%}%>
+                </ul>
+            </nav>
+        </div>
+
         <%Pelicula peliculaSeleccionada = (Pelicula) session.getAttribute("datos_pelicula_seleccionada");%>
-        
+
         <div class="contenedor informacionPelicula">
             <div class="contenedorH">
                 <div class="contenedorimagen">
@@ -72,77 +78,77 @@
                 </div>
             </div>
         </div>
-                
-        <%if (!(username == null)){%>
-                
-            <%ArrayList<Sesion> sesiones = (ArrayList) session.getAttribute("sesiones_pelicula_seleccionada");%>
 
-            <div class="contenedor informacionPelicula">
-                <div class="contenedorV">
-                    <div class="titulo2">Sesiones</div>
-                    <div class="contenedor_espacio_hora">
-                        <%for (Sesion sesion:sesiones){%>
-                            <div class="contenedor_hora">
-                                
-                                <button class="horariobutton" id="<%=sesion.getNombrePelicula().replaceAll("\\s", "")%><%=sesion.getNombreSala().replaceAll("\\s", "")%><%=sesion.getHora().toString().replaceAll(":", "")%><%=sesion.getFecha().toString().replaceAll("-", "")%>">
-                                    <%=sesion.getHora()%> <%=sesion.getFecha()%>
-                                </button>
-                                <script>
-                                $(document).ready(function() {
-                                    $('#<%=sesion.getNombrePelicula().replaceAll("\\s", "")%><%=sesion.getNombreSala().replaceAll("\\s", "")%><%=sesion.getHora().toString().replaceAll(":", "")%><%=sesion.getFecha().toString().replaceAll("-", "")%>').click(function() {
-                                        $.ajax({
-                                            url: 'ServletReserva',
-                                            type: 'POST',
-                                            data: { nombrePelicula: '<%=sesion.getNombrePelicula()%>', nombreSala: '<%=sesion.getNombreSala()%>', fechaSesion: '<%=sesion.getFecha()%>', horaSesion: '<%=sesion.getHora()%>'},
-                                            success: function(response) {
-                                                window.location.href = 'PaginaReservas.jsp';
-                                            },
-                                            error: function() {
-                                                alert('Error al procesar la solicitud');
-                                            }
-                                        });
+        <%if (!(username == null)){%>
+
+        <%ArrayList<Sesion> sesiones = (ArrayList) session.getAttribute("sesiones_pelicula_seleccionada");%>
+
+        <div class="contenedor informacionPelicula">
+            <div class="contenedorV">
+                <div class="titulo2">Sesiones</div>
+                <div class="contenedor_espacio">
+                    <%for (Sesion sesion:sesiones){%>
+                    <div class="contenedor_hora">
+
+                        <button class="horariobutton" id="<%=sesion.getNombrePelicula().replaceAll("\\s", "")%><%=sesion.getNombreSala().replaceAll("\\s", "")%><%=sesion.getHora().toString().replaceAll(":", "")%><%=sesion.getFecha().toString().replaceAll("-", "")%>">
+                            <%=sesion.getHora()%> <%=sesion.getFecha()%>
+                        </button>
+                        <script>
+                            $(document).ready(function () {
+                                $('#<%=sesion.getNombrePelicula().replaceAll("\\s", "")%><%=sesion.getNombreSala().replaceAll("\\s", "")%><%=sesion.getHora().toString().replaceAll(":", "")%><%=sesion.getFecha().toString().replaceAll("-", "")%>').click(function () {
+                                    $.ajax({
+                                        url: 'ServletReserva',
+                                        type: 'POST',
+                                        data: {nombrePelicula: '<%=sesion.getNombrePelicula()%>', nombreSala: '<%=sesion.getNombreSala()%>', fechaSesion: '<%=sesion.getFecha()%>', horaSesion: '<%=sesion.getHora()%>'},
+                                        success: function (response) {
+                                            window.location.href = 'PaginaReservas.jsp';
+                                        },
+                                        error: function () {
+                                            alert('Error al procesar la solicitud');
+                                        }
                                     });
                                 });
-                                </script>
-                            </div>
-                        <%}%>
+                            });
+                        </script>
                     </div>
-                </div>
-            </div>
-
-            <script>
-                // Función para redirigir al hacer clic en el botón de reserva
-                function generarServletReserva() {
-                    ServletReserva();
-                }
-            </script>
-            
-            <div class="contenedor informacionPelicula">
-                <div class="contenedorV">
-                    <div class="titulo2">Comentarios:</div>
-                    <div class="titulo3">Escribe tu comentario:</div>
-                    <form id="formulario" action="InsertarComentario" method="post">
-                        <textarea name="comentario" rows="10" cols="80" required></textarea><br>
-                        <input type="submit" class="formulariobutton" value="Enviar comentario">
-                    </form>
-                </div>
-            </div>
-            
-
-                    
-            <%ArrayList<String> comentarios = (ArrayList) session.getAttribute("comentarios_pelicula_seleccionada");%>
-
-            <div class="contenedor informacionPelicula">
-                <div class="contenedorV">
-                    <div class="titulo3">Comentarios de otros usuarios:</div>
-                    <%for (String comentario:comentarios){%>
-                        <div class="comentario_pelicula">
-                            <p><%=comentario%>.</p>
-                        </div>
                     <%}%>
                 </div>
             </div>
-            
+        </div>
+
+        <script>
+            // Función para redirigir al hacer clic en el botón de reserva
+            function generarServletReserva() {
+                ServletReserva();
+            }
+        </script>
+
+        <div class="contenedor informacionPelicula">
+            <div class="contenedorV">
+                <div class="titulo2">Comentarios:</div>
+                <div class="titulo3">Escribe tu comentario:</div>
+                <form id="formulario" action="InsertarComentario" method="post">
+                    <textarea name="comentario" rows="10" cols="80" required></textarea><br>
+                    <input type="submit" class="formulariobutton" value="Enviar comentario">
+                </form>
+            </div>
+        </div>
+
+
+
+        <%ArrayList<String> comentarios = (ArrayList) session.getAttribute("comentarios_pelicula_seleccionada");%>
+
+        <div class="contenedor informacionPelicula">
+            <div class="contenedorV">
+                <div class="titulo3">Comentarios de otros usuarios:</div>
+                <%for (String comentario:comentarios){%>
+                <div class="comentario_pelicula">
+                    <p><%=comentario%>.</p>
+                </div>
+                <%}%>
+            </div>
+        </div>
+
         <%}%>
     </body>
 </html>

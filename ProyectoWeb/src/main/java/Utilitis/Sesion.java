@@ -1,18 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Utilitis;
 
 import java.sql.Date;
 import java.sql.Time;
 
-/**
- *
- * @author paser
- */
 public class Sesion {
-    
+
     private Date fecha;
     private Time hora;
     private String nombreSala;
@@ -35,7 +27,7 @@ public class Sesion {
 
     public Time getHora() {
         return hora;
-    }   
+    }
 
     public void setHora(Time hora) {
         this.hora = hora;
@@ -56,6 +48,5 @@ public class Sesion {
     public void setNombrePelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
     }
-    
-    
+
 }

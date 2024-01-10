@@ -1,19 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Utilitis;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 
-/**
- *
- * @author diego
- */
 public class Reserva {
-    
+
     private String nombrePelicula;
     private Date fecha;
     private Time hora;
@@ -30,7 +22,6 @@ public class Reserva {
         this.entradas = entradas;
     }
 
-    
     public ArrayList getEntradas() {
         return entradas;
     }
@@ -39,7 +30,6 @@ public class Reserva {
         this.entradas = entradas;
     }
 
-    
     public String getReferencia() {
         return referencia;
     }
@@ -48,7 +38,6 @@ public class Reserva {
         this.referencia = referencia;
     }
 
-    
     public String getNombreSala() {
         return nombreSala;
     }
@@ -57,7 +46,6 @@ public class Reserva {
         this.nombreSala = nombreSala;
     }
 
-    
     public Time getHora() {
         return hora;
     }
@@ -66,7 +54,6 @@ public class Reserva {
         this.hora = hora;
     }
 
-    
     public Date getFecha() {
         return fecha;
     }
@@ -82,9 +69,8 @@ public class Reserva {
     public void setNombrePelicula(String nombrePelicula) {
         this.nombrePelicula = nombrePelicula;
     }
-    
-    public void addEntrada(int fila, int columna)
-    {
+
+    public void addEntrada(int fila, int columna) {
         Entrada entrada = new Entrada(fecha, hora, nombreSala, fila, columna, nombrePelicula);
         entradas.add(entrada);
     }

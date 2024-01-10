@@ -29,7 +29,6 @@ public class Sala {
         this.columnas = columnas;
     }
 
-
     /**
      * Get the value of filas
      *
@@ -47,7 +46,6 @@ public class Sala {
     public void setFilas(int filas) {
         this.filas = filas;
     }
-
 
     /**
      * Get the value of nombre

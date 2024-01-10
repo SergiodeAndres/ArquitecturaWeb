@@ -18,29 +18,32 @@ modeloDatos.abrirConexion();%>
         <link rel="stylesheet" href="estilos.css">
     </head>
     <body>
-        <header>EsCineElCine</header>
-        <nav class="menu">
-            <ul>
-              <li><a class="option" href="AdminSalas.jsp">
-                <p>Administración de salas</p>
-              </a></li>
-              <li><a class="option" href="AdminCartelera.jsp">
-                <p>Administración de Películas</p>
-              </a></li>
-              <li><a class="option" href="VerReservas.jsp">
-                <p>Administración de reservas</p>
-              </a></li>
-              <li><a class="option" href="AdminEntradas.jsp">
-                <p>Administración de entradas y sesiones</p>
-              </a></li>
-              <li><a class="option" href="Informes.jsp">
-                <p>Informes</p>
-              </a></li>
-              <li><a class="option" href="cerrarSesion.jsp">
-                <p>Cerrar Sesión</p>
-              </a></li>
-            </ul>
-        </nav>
+        <div class="contenedor_cabecera">
+            <header>EsCineElCine</header>
+            <h1>Usuario: Administrador</h1>
+            <nav class="menu">
+                <ul>
+                    <li><a class="option2" href="AdminSalas.jsp">
+                            <p>Salas</p>
+                        </a></li>
+                    <li><a class="option2" href="AdminCartelera.jsp">
+                            <p>Películas</p>
+                        </a></li>
+                    <li><a class="option2" href="VerReservas.jsp">
+                            <p>Reservas</p>
+                        </a></li>
+                    <li><a class="option2" href="AdminEntradas.jsp">
+                            <p>Entradas y sesiones</p>
+                        </a></li>
+                    <li><a class="option2" href="Informes.jsp">
+                            <p>Informes</p>
+                        </a></li>
+                    <li><a class="option2" href="cerrarSesion.jsp">
+                            <p>Cerrar Sesión</p>
+                        </a></li>
+                </ul>
+            </nav>
+        </div>
         <%
             if ( session.getAttribute("username") != null) {
                 String usuario = (String) session.getAttribute("username");
@@ -54,8 +57,10 @@ modeloDatos.abrirConexion();%>
             }
         %>
         
-        <%HashMap<String, Pelicula> peliculas = (HashMap) modeloDatos.getPeliculas();
+        <%
+            HashMap<String, Pelicula> peliculas = (HashMap) modeloDatos.getPeliculas();
             session.setAttribute("peliculas", peliculas);
+            modeloDatos.cerrarConexion();
         %>
         
         <div class="contenedor cartelera">

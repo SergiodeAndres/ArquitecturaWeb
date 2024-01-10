@@ -1,19 +1,9 @@
 package Utilitis;
 
-
 import java.util.ArrayList;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
-/**
- *
- * @author paser
- */
 public class Pelicula {
-    
+
     private String nombre;
     private String sinopsis;
     private String paginaoficial;
@@ -115,7 +105,7 @@ public class Pelicula {
     public void setDistribuidora(String distribuidora) {
         this.distribuidora = distribuidora;
     }
-    
+
     public String getDirector() {
         return director;
     }
@@ -147,16 +137,16 @@ public class Pelicula {
     public void setActores(ArrayList<String> actores) {
         this.actores = actores;
     }
-    
-    public String mostrarActores(){
-        String cadena="";
-        
-        for (int i = 0; i<actores.size()-1; i++){
-            cadena += actores.get(i)+ ", ";
+
+    public String mostrarActores() {
+        String cadena = "";
+
+        for (int i = 0; i < actores.size() - 1; i++) {
+            cadena += actores.get(i) + ", ";
         }
-        
-        cadena += actores.get(actores.size()-1);
-        
+
+        cadena += actores.get(actores.size() - 1);
+
         return cadena;
     }
 }
