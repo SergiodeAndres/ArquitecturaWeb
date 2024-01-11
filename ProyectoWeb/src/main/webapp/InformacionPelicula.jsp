@@ -16,7 +16,15 @@
         <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     </head>
     <body>
-        <%String username = (String) session.getAttribute("username");%>
+        <%
+            String username = (String) session.getAttribute("username");
+            if(username != null && username.equals("admin"))
+            {
+                response.sendRedirect("error.jsp");
+            }
+            else 
+            {
+        %>
         <div class="contenedor_cabecera">
             <header>EsCineElCine</header>
                 <% if (!(username == null)) {
@@ -149,6 +157,7 @@
             </div>
         </div>
 
+        <%}%>
         <%}%>
     </body>
 </html>

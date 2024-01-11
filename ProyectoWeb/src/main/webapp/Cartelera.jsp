@@ -19,7 +19,12 @@ modeloDatos.abrirConexion();%>
     </head>
     <body>
 
-        <%String username = (String) session.getAttribute("username");%>
+        <%String username = (String) session.getAttribute("username");
+        if(username != null && username.equals("admin"))
+            {
+                response.sendRedirect("error.jsp");
+            }
+        %>
 
         <div class="contenedor_cabecera">
             <header>EsCineElCine</header>
