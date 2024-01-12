@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class EliminarPelicula extends HttpServlet {
 
     private ModeloDatos bd;
-    private final String rutaArchivosEliminar = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\";
+    private final String rutaArchivosEliminar = "C:\\Users\\sergi\\OneDrive\\Escritorio\\ProyectoWeb\\ArquitecturaWeb\\ProyectoWeb\\src\\main\\webapp\\";
 
     public void init(ServletConfig cfg) throws ServletException {
         bd = new ModeloDatos();

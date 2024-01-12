@@ -23,9 +23,9 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ModificarPelicula extends HttpServlet {
 
     private ModeloDatos bd;
-    private final String rutaArchivos = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\imagenes\\";
+    private final String rutaArchivos = "C:\\Users\\sergi\\OneDrive\\Escritorio\\ProyectoWeb\\ArquitecturaWeb\\ProyectoWeb\\src\\main\\webapp\\imagenes\\";
     private final File uploads = new File(rutaArchivos);
-    private final String rutaArchivosEliminar = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\";
+    private final String rutaArchivosEliminar = "C:\\Users\\sergi\\OneDrive\\Escritorio\\ProyectoWeb\\ArquitecturaWeb\\ProyectoWeb\\src\\main\\webapp\\";
 
     public void init(ServletConfig cfg) throws ServletException {
         bd = new ModeloDatos();

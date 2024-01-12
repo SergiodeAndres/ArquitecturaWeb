@@ -26,7 +26,7 @@ public class InsertarPelicula extends HttpServlet {
 
     private ModeloDatos bd;
     //Poned la ruta de archivos donde guardais las imágenes en vuestro ordenador
-    private final String rutaArchivos = "C:\\Users\\paser\\OneDrive\\Documentos\\NetBeansProjects\\Cine\\src\\main\\webapp\\imagenes\\";
+    private final String rutaArchivos = "C:\\Users\\sergi\\OneDrive\\Escritorio\\ProyectoWeb\\ArquitecturaWeb\\ProyectoWeb\\src\\main\\webapp\\imagenes\\";
     private final File uploads = new File(rutaArchivos);
 
     public void init(ServletConfig cfg) throws ServletException {
@@ -62,8 +62,7 @@ public class InsertarPelicula extends HttpServlet {
 
             bd.addPelicula(p);
             guardarActores(p.getNombre(), p.getActores());
-
-            res.sendRedirect(res.encodeRedirectURL("AdminCartelera.jsp"));
+            res.getWriter().print("");
 
         } else {
             PrintWriter out = res.getWriter();

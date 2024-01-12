@@ -44,16 +44,13 @@ modeloDatos.abrirConexion();%>
             </nav>
         </div>
         <%
-            if ( session.getAttribute("username") != null) {
-                String usuario = (String) session.getAttribute("username");
-                if(!usuario.equals("admin"))
-                {
-                    response.sendRedirect("error.jsp");
-                }   
-            } 
-            else {
+            String username = (String) session.getAttribute("username");
+            if(username == null || !username.equals("admin"))
+            {
                 response.sendRedirect("error.jsp");
             }
+            else
+            {
         %>
         <%
             Sesion sesion = (Sesion) session.getAttribute("sesionActual");
@@ -126,5 +123,6 @@ modeloDatos.abrirConexion();%>
                 });
             </script>
         </div>
+        <%}%>
     </body>
 </html>

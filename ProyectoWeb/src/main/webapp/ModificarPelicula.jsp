@@ -16,16 +16,13 @@
     </head>
     <body>
         <%
-            if ( session.getAttribute("username") != null) {
-                String usuario = (String) session.getAttribute("username");
-                if(!usuario.equals("admin"))
-                {
-                    response.sendRedirect("error.jsp");
-                }   
-            } 
-            else {
+            String username = (String) session.getAttribute("username");
+            if(username == null || !username.equals("admin"))
+            {
                 response.sendRedirect("error.jsp");
             }
+            else
+            {
         %>
         <div class="contenedor_cabecera">
             <header>EsCineElCine</header>
@@ -146,5 +143,6 @@
                 </div>
             </div>
         </div>
+     <%}%>
     </body>
 </html>
